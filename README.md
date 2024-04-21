@@ -43,7 +43,7 @@ To build it to a PDF it required `LuaLaTex`.
 Dependencies can be installed on Ubuntu with the following command :
 
 ```bash
-sudo apt install sudo apt install texlive-luatex texlive-latex-base texlive-latex-recommended texlive-pictures texlive-latex-extra fonts-ebgaramond
+sudo apt install sudo apt install texlive-luatex texlive-latex-base texlive-latex-recommended texlive-pictures texlive-fonts-extra texlive-latex-extra fonts-ebgaramond
 ```
 
 Then build the PDF documentation :
