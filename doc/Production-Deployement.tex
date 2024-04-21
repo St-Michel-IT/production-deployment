@@ -1,52 +1,5 @@
 \documentclass{beamer}
-
-% Style
-\usepackage{xcolor}
-
-\usetheme{Madrid}
-\usepackage{dirtree}
-% Color
-\definecolor{flatblue}{RGB}{106, 137, 204}
-\usecolortheme[named=flatblue]{structure}
-% Font
-\usepackage{emoji}
-\usepackage{fontspec}
-\usepackage{csquotes}
-\setsansfont{EB Garamond}
-% Code
-\usepackage{listings}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=flatblue,
-    filecolor=flatblue,
-    urlcolor=flatblue,
-    citecolor=flatblue
-}
-\definecolor{flatgreen}{RGB}{0, 98, 102}
-\definecolor{flatgreyish}{RGB}{209, 216, 224}
-\lstset{
-    basicstyle=\ttfamily\scriptsize,
-    backgroundcolor=\color{flatgreyish},
-    keywordstyle=\color{flatgreen},        % Keywords font ('*' = uppercase)
-    commentstyle=\color{flatblue},         % Step between two line-numbers
-    columns=fullflexible,
-    breaklines=true
-}
-
-% Highlight
-\usepackage[most]{tcolorbox}
-\usepackage{cleveref}
-\crefformat{footnote}{#2\footnotemark[#1]#3}
-\usepackage{amsmath}
-\definecolor{flatorange}{RGB}{255, 165, 2}
-\definecolor{flatred}{RGB}{255, 71, 87}
-\tcbset{textmarker/.style={%
-skin=enhancedmiddle jigsaw,breakable,parbox=false,
-boxrule=0mm,leftrule=2mm,rightrule=0mm,boxsep=0mm,arc=0mm,outer arc=0mm,
-left=1mm,right=1mm,top=1mm,bottom=1mm,toptitle=1mm,bottomtitle=1mm}}
-\newtcolorbox{dangercolorbox}{textmarker,colback=flatorange,colframe=flatred}
+\include{./cours-style.sty}
 
 % Title
 \title{Mise en production et déploiement - MS2D / ERIS}
@@ -71,12 +24,16 @@ left=1mm,right=1mm,top=1mm,bottom=1mm,toptitle=1mm,bottomtitle=1mm}}
         \titlepage
     \end{frame}
 
+
+    \section{Table des matières}\label{sec:toc}
+
     \begin{frame}{Table des matières}
         \tableofcontents
     \end{frame}
 
 
-    \section{Programme du module}
+    \section{Programme du module}\label{sec:programme-du-module}
+
     \begin{frame}
         \frametitle{Mise en production et déploiement}
         \framesubtitle{Compétence acquise aucours des 5 jours du module}
@@ -104,7 +61,7 @@ left=1mm,right=1mm,top=1mm,bottom=1mm,toptitle=1mm,bottomtitle=1mm}}
                 \item Élaborer les bilans de l’exploitation
                 \item Prévoir les évolutions de l’infrastructure
             \end{itemize}
-            \item Indicateurs et mesure de performances – Systèmes / Réseau et web
+            \item Indicateurs et mesure de performance – Systèmes / Réseau et web
             \begin{itemize}
                 \fontsize{8pt}{8pt}\selectfont
                 \item Centralisation des journaux et exploitation des logs avec syslogd
@@ -117,12 +74,15 @@ left=1mm,right=1mm,top=1mm,bottom=1mm,toptitle=1mm,bottomtitle=1mm}}
         \end{enumerate}
     \end{frame}
 
+
+    \section{Introduction}\label{sec:introduction}
+
     \begin{frame}
         \transdissolve
         \frametitle{Evaluation}
         \begin{itemize}
-            \item Bons points tout au long du module.
-            \item 40 \% x 2 sur chaque séance de travaux pratiques.
+            \item Bons et mauvais points tout au long du module.
+            \item 80 \% x évaluation continue avec les résultats des exercices.
             \item 20 \% sur une évaluation écrite finale
         \end{itemize}
     \end{frame}
@@ -137,7 +97,7 @@ left=1mm,right=1mm,top=1mm,bottom=1mm,toptitle=1mm,bottomtitle=1mm}}
             \begin{itemize}
                 \item 1\textsuperscript{ere} année d'intervenant à Saint-Michel \emoji{star-struck}.
 
-                \item 7 ans de conseil en développement au sein d'SSII.
+                \item 7 ans de conseil en développement au sein d'SSII~.
 
                 \item 7 ans de conseil en développement à mon compte \href{https://papit.fr}{PapIT}.
 
@@ -159,15 +119,756 @@ left=1mm,right=1mm,top=1mm,bottom=1mm,toptitle=1mm,bottomtitle=1mm}}
     \end{frame}
 
 
-    \section{Généralités}
+    \section{Le matériel}\label{sec:le-materielle}
 
     \begin{frame}
         \transdissolve
         \frametitle{Les ressources matérielles}
-        \framesubtitle{Christophe Brun, conseil en développement informatique}
+        \framesubtitle{Les machines du web}
+        On peut résumer un serveur web à~:
+        \begin{itemize}
+            \item Un CPU (Architectures x86, ARM, RISC-V, etc.)
+            \item De la mémoire RAM
+            \item De l'IO
+            \begin{itemize}
+                \item Disque dur (NVMe)
+                \item Réseau (Ethernet, optique)
+                \item Disque DVD
+            \end{itemize}
+        \end{itemize}
+        A l'imagine de n'importe quel ordinateur, mais souvent avec plus de capacités et de redondances.
     \end{frame}
 
 
-    \section{Les différentes architectures d’une application}
+    \section{Le logiciel}\label{sec:le-logiciel}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources logicieles}
+        \framesubtitle{Les stacks du web}
+        Une stack web est faite en général de~:
+        \begin{itemize}
+            \item Un OS, qui est une couche d'abstraction du hardware présenté précédemment (Ubuntu, Red Hat, Windows, BSD).
+            \item Un reverse Proxy (Apache, Nginx, etc.)
+            \item Un serveur web (Apache, Nginx, Gunicorn, NextJS, etc.)
+            \item L'application web un ensemble de \textquote{Business rules} implémentées grâce à des bases de données, des IHM, des connections aux API (en PHP, Python, NodeJS, etc.)
+            \item Une base de données (MySQL, PostgreSQL, MongoDB, etc.)
+        \end{itemize}
+    \end{frame}
+
+
+    \section{Le ressources partagées}\label{sec:le-ressources-partagees}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{Les machines du web}
+        Dans un environnement de production, on retrouve une forte variabilité des ressources CPU mais surtout des ressources logicielles.
+        \bigbreak
+        A cette variabilité des environments de production, il faut ajouter la variabilité des environnements de développement.
+
+        Beaucoup de développeurs travaillent sous Windows ou Mac OS qui sont rarement des environnements de production.
+        Les capacités hardware sont souvent très différentes, la production a plus de capacité que le développement en général.
+        \bigbreak
+        C'est cette variabilité des environnements qui est la difficulté majeur du déploiement et de la mise en production.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{Les environnements cloud}
+        Pour palier à cette variabilité, diverses architectures en nuage ont vu le jour.
+
+        Certaines ont abstraient le hardware voir même une partie du software pour ne laisser que l'application.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/cloud-stacks.png} \\ IAAS, PAAS et SAAS\\
+        \flushleft
+        On voit que SAAS et Paas ont fait abstraction du hardware\footnote{\label{arcuscloud}Patel et al., \url{https://www.researchgate.net/publication/324692035_Arcus_Cloud_A_Private_Cloud_Establishment}}.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{Les environnements cloud}
+        \begin{dangercolorbox}
+            Abstraction du hardware ne veut plus dire qu'on a plus du tout besoin de s'en soucier.
+            Même dans le cloud public il faut adapter les capacités des ressources aux besoins et aux coûts.
+        \end{dangercolorbox}
+        \begin{columns}
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=3cm]{image/ovh-public-mysql.png} \\ MySQL sur le cloud public OVH \\
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=5cm]{image/ibm-public-mysql.png} \\ MySQL sur le cloud public IBM \\
+        \end{columns}
+        \flushleft
+        \bigbreak
+        Qu'est-ce qui vous étonne dans ces deux captures d'écran ?
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{Les environnements cloud}
+
+        Le cloud public donne souvent l'impression que les ressources sont infinies, mais c'est faux.
+
+        Ils ne communiquent même pas les métriques requises pour comprendre les capacités de leur cloud.
+
+        \bigbreak
+        Le cloud privé à l'avantage de présenter de manière plus claire les ressources hardware.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{Les environnements cloud}
+        Même dans le cloud privé, les vCPU ne sont pas des CPU physiques, mais des CPU partagés.
+
+        Ce n'est indiqué nul part, mais c'est probablement le cas chez OVH~.
+        Cela implique que OS qui héberge l'hyperviseur équilibre en permanence les ressources CPU entre les VM~.
+        Cela a un coût en performance qui est inconnu.
+        \bigbreak
+        Techniquement ce n'est pas obligatoire de partager les CPU, mais c'est souvent le cas pour des raisons de scalabilité.
+        Au besoin un coeur physique peut être dédié à une seule VM~.
+        \bigbreak
+        Linode, un cloud provider, apporte des informations claires sur ce sujet \url{https://www.linode.com/docs/products/compute/compute-instances/plans/comparing-shared-and-dedicated-cpus/}.
+
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{La virtualisation}
+        Développée par IBM dès les années 60, la virtualisation permet de créer plusieurs machines virtuelles sur un seul hardware.
+        Elle fut d'abord commercialement disponible sur les mainframes avant les plus petites plateformes AS400, iSeries et Power.
+        Le technologie TIMI d'IBM permet depuis les années 80 de faire tourner des programmes qui restent compatibles avec des hardwares de plus en plus puissants (changement d'ISA, d'\textit{endianness} A.K.A boutisme en français).
+        \bigbreak
+        Cela permet de mutualiser les ressources hardware, de les partager en fonction des besoins et même de changer de hardware.
+        \bigbreak
+        Elle apporte un gain de sécurité en isolant les VM les unes des autres.
+        \begin{dangercolorbox}
+            Quid des gros bugs /failles de sécurité comme Meltdown et Spectre ?
+        \end{dangercolorbox}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{La virtualisation\cref{arcuscloud}}
+        Aujourd'hui la virtualisation est principalement utilisée pour le partage des ressources et isoler les applications dans une VM pour raison de sécurité.
+        Un OS hôte fait tourner un hyperviseur qui lui fait tourner des VM et plus juste un soft compilé.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/virtualisation.png}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{La virtualisation avec KVM et Qemu\footnote{\label{ubuntukvm}KVM hypervisor: a beginners’ guide, \url{https://ubuntu.com/blog/kvm-hyphervisor}]}}
+        \begin{columns}
+            \column{0.5\textwidth}
+            KVM (Kernel-based Virtual Machine) est une technologie de virtualisation ouverte intégrée à Linux.
+
+            C'est un hyperviseur de type 1, qui négocie directement avec le hardware et offre des performances proches de la machine hôte.
+            Contrairement à un hyperviseur de type 2, qui doit passer par l'OS hôte pour accéder au hardware mais ces derniers ont donc une meilleurs portabilité et compatibilité.
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=6cm]{image/kvm-qemu.png}
+        \end{columns}
+        \bigbreak
+        Qemu lui peut faire tourner des VM avec ou sans KVM en fonction des besoins.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les ressources partagées}
+        \framesubtitle{Exercice, avec ou sans KVM~?}
+        \begin{columns}
+            \column{0.5\textwidth}
+            \begin{itemize}
+                \item Un Windows guest sur un Mac OS hôte?
+                \item Un Alpine Linux sur un Raspberry\footnotemark~?
+                \item VM Ubuntu sur un Ubuntu hôte?
+                \item VM Ubuntu sur un Windows hôte?
+            \end{itemize}
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=6cm]{image/question-mark-on-a-blank-background.png}
+        \end{columns}
+        \footnotetext{\url{https://unix.stackexchange.com/questions/340912/qemu-with-kvm-with-differaing-host-guest-architectures}}
+    \end{frame}
+
+
+    \section{Les services}\label{sec:les-services}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les services}
+        \framesubtitle{Définition}
+        Dans les systèmes Windows et Linux, le terme service service désigne un programme qui s'exécute en arrière-plan, sans intervention de l'utilisateur.
+
+        Il faut le configurer pour qu'il démarre automatiquement, dans un certain ordre et avec les bonnes permissions.
+        \bigbreak
+        La configuration principale consiste à définit une ligne de commande qui sera exécutée au démarrage du service.
+        \bigbreak
+        Avec \lstinline{systemd}\footnote{System and Service Manager, \url{https://systemd.io/}} sous Linux, on peut définir des dépendances entre les services.
+        Limiter les ressources CPU, mémoire, IO, etc.
+        Définir ce qu'il faut faire en cas de crash.
+        Exécuter des scripts avant et après le démarrage du service.
+        \begin{dangercolorbox}
+            Ne pas confondre \lstinline{systemd} qui exécute des tâches en arrière plan et l'ordonnanceur \lstinline{cron}.
+        \end{dangercolorbox}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Les services}
+        \framesubtitle{Examples}
+        \lstinline{systemd} est donc l'outil de choix pour lancer en production des applications, des progiciels, etc.
+        \bigbreak
+        Encore mieux, on peut configurer des services pour qu'ils lancent des VM avec Qemu et les applications tourneraient dans les VM~.
+        On profites des avantages de la virtualisation pour isoler les applications et les sécuriser.
+        \bigbreak
+        Que fait cette configuration~?
+        \begin{lstlisting}
+[Unit]
+Description=IN DATA development application
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+RuntimeMaxSec=3600s
+Restart=always
+WorkingDirectory=/home/debian/dev/IN FRANCE
+ExecStart="/home/debian/dev/IN FRANCE/python3-dev/bin/python3" -m gunicorn -w 1 -b unix:/tmp/in-france-dev-indata-gunicorn.sock application_indata
+[Install]
+WantedBy=multi-user.target
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les services}
+        \framesubtitle{Les commandes de base}
+        \begin{itemize}
+            \item \lstinline{systemctl start <service>} pour démarrer un service.
+            \item \lstinline{systemctl stop <service>} pour arrêter un service.
+            \item \lstinline{systemctl restart <service>} pour redémarrer un service.
+            \item \lstinline{systemctl status <service>} pour afficher le statut d'un service.
+            \item \lstinline{systemctl enable <service>} pour activer un service au démarrage.
+            \item \lstinline{systemctl disable <service>} pour désactiver un service au démarrage.
+            \item \lstinline{systemctl list-units --type=service} pour lister les services.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Exercice pratique}
+        \framesubtitle{Créer une VM avec Qemu et lancer une application avec systemd}
+        Les exigences~:
+        \begin{itemize}
+            \item Créer une VM Linux avec Qemu à l'image d'un VPS OH d'entrée de gamme (1~vCPU, 2~Go de RAM et 10~Go de disque).
+            \item Configurer la machine hôte pour démarrer la VM automatiquement.
+            \item Configurer la VM et Qemu avec une sécurité en accord les bonnes pratiques de sécurité (Clé SSH uniquement, pas de connexion SSH avec le user root, gestion des ports forwardés).
+            \item Démarrer l'application Gunicorn \textquote{Hello World} \url{https://gunicorn.org/\#quickstart} avec \lstinline{systemd}.
+            \item Accès à la VM et à l'application depuis la machine hôte.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Exercice pratique}
+        \framesubtitle{Une des solutions}
+        \begin{lstlisting}[language=bash]
+qemu-img create -f qcow2 linux.qcow2 10G # Create a disk image
+# Download a minial Ubuntu ISO
+wget http://archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/current/images/netboot/mini.iso
+# Install the OS using a virtual CDROM
+qemu-system-x86_64 -m 2G -smp 1 -nic user -boot d -cdrom mini.iso -hda linux.qcow2 -k fr -enable-kvm
+# Run the VM to configure and test SSH
+qemu-system-x86_64 -m 2G -smp 1 -nic user,hostfwd=tcp::5022-:22,hostfwd=tcp::5080-:80 -display none -hda linux.qcow2 -k fr -enable-kvm
+        \end{lstlisting}
+        Expliquez chacune des lignes de commande ci-dessus.
+        \bigbreak
+        Ressources utiles~:
+        \begin{itemize}
+            \item \href{https://wiki.alpinelinux.org/wiki/Install_Alpine_in_QEMU}{Similaire mais avec Alpine Linux}
+            \item \href{https://help.ubuntu.com/community/Installation/MinimalCD\#A64-bit_PC_.28amd64.2C_x86_64.29_.28Recommended.29}{Page d'installation Ubuntu du \textquote{MinimalCD} }
+            \item \href{https://phoenixnap.com/kb/generate-setup-ssh-key-ubuntu}{Configuration des login SSH sur Ubuntu}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Exercice pratique}
+        \framesubtitle{Une des solutions}
+        Le service de la machine hôte~:
+        \begin{lstlisting}[language=bash]
+[Unit]
+Description=Qemu Ubuntu VM for St-Michel classes
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Restart=always
+WorkingDirectory=/home/chrichri/Documents/Campus-St-Michel-IT/production-deployment
+ExecStart=/usr/bin/qemu-system-x86_64 -m 2G -smp 1,maxcpus=1 -nic user,hostfwd=tcp::5022-:22,hostfwd=tcp::5080-:8080 -display none -hda linux.qcow2 -k fr -enable-kvm
+
+[Install]
+WantedBy=multi-user.target
+        \end{lstlisting}
+        Expliquez chaque option de la configuration du service.
+        \pause
+        \begin{dangercolorbox}
+            \lstinline{-enable-kvm} si l'hôte est un Linux également.
+
+            \lstinline{-display none} pour ne pas afficher la console graphique.
+        \end{dangercolorbox}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Exercice pratique}
+        \framesubtitle{Une des solutions}
+        Le service dans la VM~:
+        \begin{lstlisting}[language=bash]
+[Unit]
+Description=St-Michel Hello World
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Restart=always
+WorkingDirectory=/home/chrichri
+ExecStart=/usr/bin/gunicorn -w 1 hello:app -b 0.0.0.0:8080
+
+[Install]
+WantedBy=multi-user.target
+        \end{lstlisting}
+        Expliquez chaque option de la configuration du service.
+    \end{frame}
+
+
+    \section{Ansible}\label{sec:ansible}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Définition\footnote{Ansible Community Documentation, \url{https://docs.ansible.com/ansible/latest/getting_started/index.html}}}
+        Ansible est un outil d'automatisation de la configuration des machines physiques ou virtuelles.
+        Il permet de définir des \textquote{playbooks} qui décrivent une configuration à appliquer aux machines qui sont dans \textquote{l'inventory} .
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/ansible.png}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Example d'inventaire}
+        Pour accéder à la VM créée précédemment dans Qemu, il faut définir un inventaire avec les données dont on aurait besoin pour y accéder par SSH~.
+        \begin{lstlisting}[language=bash]
+$ ssh chrichri@localhost -p 5022 -v -i /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/virt-ubuntu ansible_ssh_user=chrichri
+        \end{lstlisting}
+        Devient dans l'inventaire (on peut créer des variables)~:
+        \begin{lstlisting}
+[gunicorn]
+localhost:5022 ansible_ssh_private_key_file=/home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/virt-ubuntu ansible_ssh_user=chrichri
+        \end{lstlisting}
+        On utilise le module \lstinline{ping} pour vérifier que l'accès SSH est correctement configuré.
+        \begin{lstlisting}[language=bash]
+$ ansible gunicorn -m ping -i inventory.ini
+localhost | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Aucune installation côté client\emoji{heart}}
+        Pourquoi Ansible n'a aucun client sur les machines de l'inventaire~?
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/question-mark-on-a-blank-background.png}
+        \bigbreak
+        \pause
+        \flushleft
+        Avec le seul accès SSH, il exécute les commandes qu'il faut.
+        Il est agnostique à l'OS~!
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Example de \textquote{playbook}}
+        Qu'a-t-on installé sur un Ubuntu \textit{base server} comme package(s) pour pouvoir exécuter l'application gunicorn Hello World~?
+        \pause
+        % With apt, packages python3-gunicorn
+        \begin{lstlisting}[language=bash]
+sudo apt-get install python3-gunicorn
+        \end{lstlisting}
+        Qui devient dans un playbook Ansible \lstinline{gunicorn.yml}~:
+        \begin{lstlisting}
+---
+- name: gunicorn
+  hosts: gunicorn
+  become: yes # Run as root
+  tasks:
+  - name: Install gunicorn
+    apt:
+      name: gunicorn # Le package à installer
+      state: present
+        \end{lstlisting}
+        À lancer avec la commande~:
+        \begin{lstlisting}[language=bash]
+$ ansible-playbook -i inventory.ini gunicorn.yml
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Example de \textquote{playbook}}
+        Le résultat de l'exécution du playbook \lstinline{gunicorn.yml}~:
+        \begin{lstlisting}[language=bash]
+$ ansible-playbook -i inventory.ini gunicorn.yml
+\ldots
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+$ ansible-playbook -i inventory.ini gunicorn.yml
+\ldots
+localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+        \end{lstlisting}
+        A la première exécution, le package est installé, à la seconde il est déjà installé, aucun changement.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{La Ansible Galaxy}
+        Comme souvent, inutile de tout recoder.
+        Ansible est modulaire grâce aux \textquote{roles} et aux \textquote{playbooks} qui sont aussi des modules qui les composent\footnote{Roles, \url{https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html}}.
+        \bigbreak
+        La communauté Ansible a packagé des modules et des playbooks pour les tâches les plus courantes \footnote{Ansible Galaxy, \url{https://galaxy.ansible.com/ui/}}.
+        Ils sont disponibles sur la \href{https://galaxy.ansible.com/}{Ansible Galaxy}.
+        Et peuvent être installé avec la commande \lstinline{ansible-galaxy install <module>}, commande issue du package \lstinline{ansible-core}.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Excercice}
+        En utilisant la VM crée à l'exercice précédent, configurer un inventaire et un playbook pour installer l'application Spring Boot.
+        \bigbreak
+        Vous pouvez vous aider du \href{https://spring.io/guides/gs/spring-boot}{tutoriel officiel}.
+        \bigbreak
+        \centering
+        \includegraphics[width=8cm]{image/most-popular-backend.jpg}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Solution à l'exercice}
+        De nombreuses solutions sont valides.
+        Mais avec Java il faut profiter du \textquote{Write once, run anywhere}.
+
+        Ce n'est donc pas obliger d'utiliser un système de build comme Maven ou Gradle sur la VM, Java suffit pour exécuter une JAR~.
+
+        Une JAR (Java ARchive) est un exécutable qui contient toutes les classes zippées qui se lance avec \lstinline{java -jar <JAR file>}.
+        \bigbreak
+        Par exemple Java 17~:
+        \begin{lstlisting}
+---
+- hosts: gunicorn
+  become: yes
+  tasks:
+  - name: Install Java 17
+    apt:
+      name: openjdk-17-jdk
+      state: present
+        \end{lstlisting}
+    \end{frame}
+
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Conclusion sur la virtualisation d'application dans un OS}
+        \begin{itemize}
+            \item On sait créer et configurer une VM avec Qemu.
+            \item On sait créer un service avec systemd pour automatiser des taches dans la machine hôte ou la VM~.
+            \item On sait automatiser la configuration des VMs avec Ansible.
+        \end{itemize}
+        \bigbreak
+        Dans la plus part des clouds privés comme OVH on peut uploader des images de VMs et les lancer.
+
+        Ces technologies sont donc compatibles avec le cloud et le on-premise.
+
+        On a donc un déploiement sécurité et agnostique à une infrastructure.
+    \end{frame}
+
+
+    \section{Docker}\label{sec:docker}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Docker}
+        \framesubtitle{Définition}
+        \textquote{Accelerate how you build, share, and run applications}\footnote{What is Docker, \url{https://www.docker.com/}}.
+        \bigbreak
+        C'est un outil qui permet de créer des conteneurs qui sont des environnements isolés pour exécuter des applications.
+
+        Cet environnement portable est défini dans la \lstinline{Dockerfile}.
+
+        Un autre fichier de configuration le \lstinline{docker-compose.yml} permet de définir comment un ou plusieurs conteneurs communiquent entre eux et avec la machine.
+        \bigbreak
+        \begin{columns}
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=5cm]{image/docker-vs-vm.png}\footnotemark
+            \column{0.5\textwidth}
+            Il utilise des outils de la machine, du kernel, \lstinline{chroot} et des librairies de la machine hôte pour fonctionner mais ne fait pas tourner un autre OS contrairement à la virtualisation.
+        \end{columns}
+        \footnotetext{Containers vs. virtual machines, \url{https://www.atlassian.com/microservices/cloud-computing/containers-vs-vms}}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Docker}
+        \framesubtitle{Définition}
+        Il permet en théorie le déploiement de n'importe quelle application sur n'importe quelle architecture (OS, ISA)\footnote{Docker official Images, \url{https://github.com/docker-library/official-images\#architectures-other-than-amd64}}~:
+        \bigbreak
+        \begin{columns}
+            \column{0.4\textwidth}
+            \begin{scriptsize}
+                \begin{itemize}
+                    \item ARMv6 32-bit (arm32v6)
+                    \item ARMv7 32-bit (arm32v7)
+                    \item ARMv8 64-bit (arm64v8)
+                    \item Linux x86-64 (amd64)
+                    \item Windows x86-64 (windows-amd64)
+                    \item ARMv5 32-bit (arm32v5)
+                    \item IBM POWER LE (ppc64le)
+                    \item IBM z Systems (s390x)
+                    \item MIPS64 LE (mips64le)
+                    \item RISC-V 64-bit (riscv64)
+                    \item x86/i686 (i386)
+                \end{itemize}
+            \end{scriptsize}
+            \column{0.6\textwidth}
+            \centering
+            \includegraphics[width=6cm]{image/it-works.png}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Docker, créer une image}
+        \framesubtitle{Définir l'image dans un Dockerfile}
+        L'essentiel de la Dockerfile~:
+        \begin{itemize}
+            \item Le nom de fichier par convention est \lstinline{Dockerfile}.
+            \item Il vient surcharger une image de base définit dans \lstinline{FROM}.
+            \item On peut y définir des variables d'environnement avec \lstinline{ENV}.
+            \item La commande \lstinline{RUN} permet d'exécuter des commandes dans l'image.
+            Comme par exemple pour ajouter des dépendances dans l'étape de build de l'image.
+            \item La commande \lstinline{CMD} définit la commande qui sera exécutée au démarrage du conteneur.
+            \item La commande \lstinline{EXPOSE} définit les ports qui seront exposés par le conteneur.
+            \item La commande \lstinline{COPY} permet de copier des fichiers dans l'image.
+            \item La commande \lstinline{ADD} permet de copier des fichiers dans l'image et de les décompresser.
+            \item \textit{Many more\ldots}\footnote{Dockerfile reference, \url{https://docs.docker.com/reference/dockerfile/}}
+        \end{itemize}
+
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Docker, créer une image}
+        \framesubtitle{Définir l'image dans un Dockerfile}
+        Que fait cette Dockerfile~?
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+FROM mysql:8-debian
+
+ENV RNCS_PATH=/root/rncs
+
+COPY ./ ${RNCS_PATH}
+WORKDIR ${RNCS_PATH}
+
+RUN apt-get update && \
+    apt-get install -y jq python3 python3-pip moreutils wget unzip libcairo2-dev && \
+    apt-get clean && \
+    apt-get autoclean && \
+    apt-get autoremove -y && \
+    python3 -m pip install --no-cache-dir -r requirements.txt && \
+    python3 -m pip install --no-cache-dir -r dev-requirements.txt
+
+EXPOSE 3000/tcp
+EXPOSE 5000/tcp
+        \end{lstlisting}
+        Dans la vraie vie tout est très clair grâce à des commentaires explicites \emoji{smiling-face-with-halo}.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Le Docker hub}
+        \framesubtitle{\textit{Docker Hub is the world's easiest way to create, manage, and deliver your team's container applications}}
+        Encore une fois, inutile de tout recoder.
+        On vient en premier trouver une image la plus complète possible pour son application.
+        \bigbreak
+        Il probablement une image pour quasi toutes les stacks existantes.
+        \bigbreak
+        En terme de cybersécurité, veillez à auditer les développeurs des images pour ne pas subir une \textit{supply chain attack}.
+
+        Une des bonnes pratiques est d'utiliser des images officielles.
+        Par exemple pour Tensorflow, le développeur est Google, etc.
+        \bigbreak
+        Concernant les performances les images basées sur Alpine Linux sont souvent plus légères développées autour de \lstinline{musl libc} et busybox.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les commandes Docker}
+        \framesubtitle{Builder, lancer et stopper une image}
+        Ci-dessous, quelques commandes Docker de base~:
+        \begin{itemize}
+            \item \lstinline{docker build -t <image-name> .} pour construire une image Docker.
+            \item \lstinline{docker run <image-name>} pour lancer une image Docker.
+            \item \lstinline{docker stop <container-id>} pour arrêter un conteneur.
+            \item \lstinline{docker ps} pour lister les conteneurs en cours d'exécution.
+            \item \lstinline{docker ps -a} pour lister tous les conteneurs.
+            \item \lstinline{docker images} pour lister les images.
+            \item \lstinline{docker rmi <image-id>} pour supprimer une image.
+            \item \lstinline{docker rm <container-id>} pour supprimer un conteneur.
+            \item \lstinline{docker exec -it <container-id> /bin/bash} pour accéder à un conteneur.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Docker, créer une image}
+        \framesubtitle{Instllation d'un environnement de développement Docker}
+        Comme le dit le site Docker, \textit{Build, Share, Run, verify}.
+        Tout cela est possible avec Docker Desktop.
+        Un GUI qui centralise la plupart des fonctionnalités de Docker.
+        \bigbreak
+        Sur la machine de production le Docker Engine suffit.
+        \bigbreak
+        \centering
+        \includegraphics[width=8cm]{image/docker-desktop.png}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Docker, créer une image}
+        \framesubtitle{Exercice}
+        Développer une image Docker pour une application Spring Boot, la même qu'à l'exercice précédent.
+        \bigbreak
+        Pensez à optimiser l'image pour qu'elle soit la plus légère possible et le plus sécurisé possible\ldots
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/young-studying.png}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Docker, trouver la bonne image}
+        \framesubtitle{Exercice}
+        Sur le Docker Hub les images pour les applications suivantes:
+        \begin{itemize}
+            \item Une application NodeJS~.
+            \item Une application Flask.
+            \item OpenJDK 17.
+            \item Alpine Linux
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Docker compose}
+        \framesubtitle{Le fichier de configuration Docker Compose\footnote{docker compose, \url{https://docs.docker.com/reference/cli/docker/compose/}}}
+        Le fichier \lstinline{docker compose.yml} permet de définir comment les conteneurs communiquent entre eux et avec la machine.
+        Limiter les ressources CPU, mémoire prise sur la machine.
+        \bigbreak
+        Pour les applications web par exemple, il faut définir les ports qui seront exposés par les conteneurs~:
+        \begin{lstlisting}
+services:
+  webapp:
+    image: examples/web
+    ports:
+      - "8000:8000"
+    volumes:
+      - "/data"
+        \end{lstlisting}
+        On y définit aussi le(s) Dockerfile(s)~:
+        \begin{lstlisting}
+services:
+  client:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.production
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Docker compose}
+        \framesubtitle{Le fichier de configuration Docker Compose\footnote{docker compose, \url{https://docs.docker.com/reference/cli/docker/compose/}}}
+        Les commandes pour builder, lancer et stopper les conteneurs définis dans le fichier \lstinline{docker-compose.yml}~:
+        \begin{itemize}
+            \item \lstinline{docker compose build} pour construire les images.
+            \item \lstinline{docker compose up} pour lancer les conteneurs.
+            \item \lstinline{docker compose down} pour arrêter les conteneurs.
+            \item \lstinline{docker compose ps} pour lister les conteneurs en cours d'exécution.
+            \item \lstinline{docker compose ps -a} pour lister tous les conteneurs.
+            \item \lstinline{docker compose images} pour lister les images.
+            \item \lstinline{docker compose exec <container-name> /bin/bash} pour accéder à un conteneur.
+        \end{itemize}
+        Elles sont très similaires aux commandes Docker.
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Docker compose}
+        \framesubtitle{Exercice, développer une configuration Docker Compose}
+        Un Docker compose pour un site Wordpress, ce dernier a besoin d'une base de données MySQL~.
+        \pause
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+version: "3.9"
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+volumes:
+  db_data: {}
+        \end{lstlisting}
+    \end{frame}
 
 \end{document}

@@ -1,6 +1,7 @@
-# Qualité Code Source
+# Mise en Production et déploiement
 
-Ce repository contient les cours, les exercices et les sources du module Qualité Code Source du Bachelor CSI.
+Ce repository contient les cours, les exercices et les sources du module Mise en Production et déploiement de Mastère
+MS2D et ERIS.
 
 Le support de cours est disponible dans le dossier `./doc/build/pdf` au format PDF.
 
@@ -8,63 +9,32 @@ Le support de cours est disponible dans le dossier `./doc/build/pdf` au format P
 
 Les cours couvrent normalement le programme suivant :
 
-1. Tests unitaires
+1. Mise en exploitation des ressources matérielles et logicielles
 
-    * Intégration des tests unitaires dans un projet
-    * Assertions simples, interprétation des messages de retour
-    * Gestion des exceptions
-    * Tests utilisant des jeux de données
+    * Vérification des configurations
+    * Déploiement des applications
+    * Automatisation des procédures de déploiement
+    * Élaborer les bilans de l’exploitation
+    * Prévoir les évolutions de l’infrastructure
 
-2. Bonnes pratiques
+2. Indicateurs et mesure de performances – Systèmes / Réseau et web
 
-    * Formatage du code source (indentation, CamelCase)
-    * Nomenclature du code
-    * Génération de la documentation
-    * Organisation du code d’un projet
-
-3. Versionning (GIT)
-
-    * Comprendre le versioning (dépôt, instantanés, fichiers à ignorer)
-    * Commandes de base de GIT (annuler des actions, manipuler l’historique, les branches)
-    * Gestion des dépôts de code source
-
-4. Plateforme d’intégration et de livraisons continues
-
-    * Mise en place d’un serveur d’intégration continue
-    * Gestion de des tâches
-    * Automatisation des tests unitaires et d’intégration
-    * Génération et interprétation de rapports
-    * Déploiement de la version validée
+    * Centralisation des journaux et exploitation des logs avec syslogd
+    * Analyse du trafic réseau avec MRTG
+    * Analyse des journaux de type d’Apache Web Server avec Analog
+    * Consolidation d’indicateur de qualité avec rrdtool
+    * Création de page HTML de type tableau de bord avec rrdtool – Tableau de bord
+    * Gestion d’incidents et actions correctives
 
 ## Compétences
 
 Ils permettent normalement d'acquérir les compétences suivantes :
 
-* Maîtriser la création et l’exécution de tests unitaires avec un framework de tests unitaires
-* Mettre en place une démarche d’amélioration de la qualité du code
-* Utiliser une plateforme d’intégration et de livraison continue
+* Préparer l’environnement et déployer le progiciel ou la solution.
 
 ## Installation
 
-Pytest means Python, it's a framework to test Python using Python.
-First create a virtual environment.
-
-```bash
-python3 -m venv venv
-```
-
-Then activate it.
-
-```bash
-source venv/bin/activate
-```
-
-Then install pytest and other dependencies of that project.
-
-```bash
-pip install -r requirements.txt
-```
-
+Nothing to install at the moment.
 
 ## Build the documentation
 
@@ -111,3 +81,15 @@ Check the LaTex syntax in an active virtual environment :
 ```bash
 /usr/bin/bash checkmytex.sh
 ```
+
+Automation using Ansible :
+
+```bash
+apt install ansible-core
+```
+
+## VM passwords
+
+login : `chrichri`
+
+password : `RF8hpN1@W2`
