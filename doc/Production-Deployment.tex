@@ -541,11 +541,11 @@ $ ansible-playbook -i inventory.ini gunicorn.yml
         Le résultat de l'exécution du playbook \lstinline{gunicorn.yml}~:
         \begin{lstlisting}[language=bash]
 $ ansible-playbook -i inventory.ini gunicorn.yml
-\ldots
+...
 localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 $ ansible-playbook -i inventory.ini gunicorn.yml
-\ldots
+...
 localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
         \end{lstlisting}
         A la première exécution, le package est installé, à la seconde il est déjà installé, aucun changement.
