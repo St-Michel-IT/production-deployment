@@ -309,7 +309,7 @@
         \transdissolve
         \frametitle{Les services}
         \framesubtitle{Définition}
-        Dans les systèmes Windows et Linux, le terme service service désigne un programme qui s'exécute en arrière-plan, sans intervention de l'utilisateur.
+        Dans les systèmes Windows et Linux, le terme service désigne un programme qui s'exécute en arrière-plan, sans intervention de l'utilisateur.
 
         Il faut le configurer pour qu'il démarre automatiquement, dans un certain ordre et avec les bonnes permissions.
         \bigbreak
@@ -319,6 +319,8 @@
         Limiter les ressources CPU, mémoire, IO, etc.
         Définir ce qu'il faut faire en cas de crash.
         Exécuter des scripts avant et après le démarrage du service.
+        \bigbreak
+        Leur chemin par défaut est \lstinline{/etc/systemd/system/}.
         \begin{dangercolorbox}
             Ne pas confondre \lstinline{systemd} qui exécute des tâches en arrière plan et l'ordonnanceur \lstinline{cron}.
         \end{dangercolorbox}
@@ -329,7 +331,7 @@
         \frametitle{Les services}
         \framesubtitle{Examples}
         \lstinline{systemd} est donc l'outil de choix pour lancer en production des applications, des progiciels, etc.
-        \bigbreak
+
         Encore mieux, on peut configurer des services pour qu'ils lancent des VM avec Qemu et les applications tourneraient dans les VM~.
         On profites des avantages de la virtualisation pour isoler les applications et les sécuriser.
         \bigbreak
@@ -337,8 +339,6 @@
         \begin{lstlisting}
 [Unit]
 Description=IN DATA development application
-After=network.target
-StartLimitIntervalSec=0
 [Service]
 RuntimeMaxSec=3600s
 Restart=always
@@ -347,6 +347,9 @@ ExecStart="/home/debian/dev/IN FRANCE/python3-dev/bin/python3" -m gunicorn -w 1 
 [Install]
 WantedBy=multi-user.target
         \end{lstlisting}
+        \begin{dangercolorbox}
+            Le chemin de l'exécutable dans \lstinline{ExecStart} doit être absolu!
+        \end{dangercolorbox}
     \end{frame}
 
     \begin{frame}
@@ -361,6 +364,23 @@ WantedBy=multi-user.target
             \item \lstinline{systemctl enable <service>} pour activer un service au démarrage.
             \item \lstinline{systemctl disable <service>} pour désactiver un service au démarrage.
             \item \lstinline{systemctl list-units --type=service} pour lister les services.
+            \item \lstinline{systemctl daemon-reload} pour recharger la configuration de tous les services.
+            \item \lstinline{systemctl reload <service>} pour recharger la configuration d'un service.
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \transdissolve
+        \frametitle{Les services}
+        \framesubtitle{Les commandes pour monitorer l'exécution}
+        Pour monitor les logs d'un service, la commande \lstinline{journalctl} est très utile.
+        \bigbreak
+        Quelques exemples de commandes utiles~:
+        \begin{itemize}
+            \item \lstinline{journalctl --unit<service>} pour afficher les logs d'un service.
+            \item \lstinline{journalctl --unit<service> -f} pour afficher les logs en temps réel.
+            \item \lstinline{journalctl --unit<service> --since "2024-04-17 00:00:00"} pour afficher les logs depuis une date.
+            \item \lstinline{journalctl --unit<service> --since "2024-04-17 00:00:00" --until "2024-04-17 23:59:59"} pour afficher les logs entre deux dates.
+            \item \lstinline{journalctl --unit=<service> -n 100 --no-pager} pour afficher les 100 dernière lignes.
         \end{itemize}
     \end{frame}
 
