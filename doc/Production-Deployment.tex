@@ -501,7 +501,7 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.s
         \frametitle{Automatisation de la configuration avec Ansible}
         \framesubtitle{Définition\footnote{Ansible Community Documentation, \url{https://docs.ansible.com/ansible/latest/getting_started/index.html}}}
         Ansible est un outil d'automatisation de la configuration des machines physiques ou virtuelles.
-        Il permet de définir des \textquote{playbooks} qui décrivent une configuration à appliquer aux machines qui sont dans \textquote{l'inventory} .
+        Il permet de définir des \textquote{playbooks} qui décrivent une configuration à appliquer aux machines qui sont dans l'\textquote{inventory} .
         \bigbreak
         \centering
         \includegraphics[width=5cm]{image/ansible.png}
@@ -513,7 +513,7 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.s
         \framesubtitle{Example d'inventaire}
         Pour accéder à la VM créée précédemment dans Qemu, il faut définir un inventaire avec les données dont on aurait besoin pour y accéder en SSH~.
         \begin{lstlisting}[language=bash]
-$ ssh chrichri@localhost -p 5022 -v -i /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/virt-ubuntu ansible_ssh_user=chrichri
+$ ssh chrichri@localhost -p 5022 -v -i /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/virt-ubuntu
         \end{lstlisting}
         La commande ci-dessus, devient dans l'inventaire (on peut créer des variables)~:
         \begin{lstlisting}
@@ -638,6 +638,14 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     apt:
       name: openjdk-17-jdk
       state: present
+
+  - name: Copy Spring Boot Application
+    copy:
+      src: /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/helloworld/build/libs/helloworld-0.0.1-SNAPSHOT.jar
+      dest: /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar
+
+  - name: Run Spring Boot Application
+    shell: nohup java -jar /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar &
         \end{lstlisting}
     \end{frame}
 

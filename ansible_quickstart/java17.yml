@@ -6,3 +6,11 @@
     apt:
       name: openjdk-17-jdk
       state: present
+
+  - name: Copy Spring Boot Application
+    copy:
+      src: /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/helloworld/build/libs/helloworld-0.0.1-SNAPSHOT.jar
+      dest: /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar
+
+  - name: Run Spring Boot Application
+    shell: nohup java -jar /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar &
