@@ -2,7 +2,7 @@
 \include{./cours-style.sty}
 
 % Title
-\title{Mise en production et déploiement - MS2D / ERIS}
+\title{M.E.P. et déploiement - MS2D / ERIS}
 \author{Christophe Brun}
 \institute{Campus Saint-Michel IT}
 \date{17 avril 2024}
@@ -401,7 +401,7 @@ WantedBy=multi-user.target
     \begin{frame}[fragile]
         \transdissolve
         \frametitle{Exercice pratique}
-        \framesubtitle{Une des solutions}
+        \framesubtitle{Une des solutions (commandes à exécuter sur la machine hôte)}
         \begin{lstlisting}[language=bash]
 qemu-img create -f qcow2 linux.qcow2 10G # Create a disk image
 # Download a minial Ubuntu ISO
@@ -471,6 +471,28 @@ WantedBy=multi-user.target
         Expliquez chaque option de la configuration du service.
     \end{frame}
 
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Exercice pratique}
+        \framesubtitle{Une des solutions (commande à exécuter sur la VM)}
+        Commande pour configurer la VM~:
+        \begin{lstlisting}[language=bash]
+# Install gunicorn, pip install gunicorn is no longer recommanded
+sudo apt-get install python3-gunicorn
+# Configure SSH
+sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+# Restart SSH with the new configuration
+sudo systemctl restart sshd
+# Create the .ssh directory and the authorized_keys file
+mkdir -p ~/.ssh
+touch ~/.ssh/authorized_keys
+# Add the public key to the authorized_keys file
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.ssh/authorized_keys
+        \end{lstlisting}
+        Expliquez chaque commande.
+    \end{frame}
+
 
     \section{Ansible}\label{sec:ansible}
 
@@ -489,11 +511,11 @@ WantedBy=multi-user.target
         \transdissolve
         \frametitle{Automatisation de la configuration avec Ansible}
         \framesubtitle{Example d'inventaire}
-        Pour accéder à la VM créée précédemment dans Qemu, il faut définir un inventaire avec les données dont on aurait besoin pour y accéder par SSH~.
+        Pour accéder à la VM créée précédemment dans Qemu, il faut définir un inventaire avec les données dont on aurait besoin pour y accéder en SSH~.
         \begin{lstlisting}[language=bash]
 $ ssh chrichri@localhost -p 5022 -v -i /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/virt-ubuntu ansible_ssh_user=chrichri
         \end{lstlisting}
-        Devient dans l'inventaire (on peut créer des variables)~:
+        La commande ci-dessus, devient dans l'inventaire (on peut créer des variables)~:
         \begin{lstlisting}
 [gunicorn]
 localhost:5022 ansible_ssh_private_key_file=/home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/virt-ubuntu ansible_ssh_user=chrichri
@@ -536,7 +558,7 @@ localhost | SUCCESS => {
         \begin{lstlisting}[language=bash]
 sudo apt-get install python3-gunicorn
         \end{lstlisting}
-        Qui devient dans un playbook Ansible \lstinline{gunicorn.yml}~:
+        Commande qui devient dans un playbook Ansible \lstinline{gunicorn.yml}~:
         \begin{lstlisting}
 ---
 - name: gunicorn
@@ -576,11 +598,11 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         \frametitle{Automatisation de la configuration avec Ansible}
         \framesubtitle{La Ansible Galaxy}
         Comme souvent, inutile de tout recoder.
-        Ansible est modulaire grâce aux \textquote{roles} et aux \textquote{playbooks} qui sont aussi des modules qui les composent\footnote{Roles, \url{https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html}}.
+        Ansible est modulaire grâce aux \textquote{roles} et aux \textquote{playbooks} qui sont eux-mêmes des modules\footnote{Roles, \url{https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html}}.
         \bigbreak
-        La communauté Ansible a packagé des modules et des playbooks pour les tâches les plus courantes \footnote{Ansible Galaxy, \url{https://galaxy.ansible.com/ui/}}.
+        La communauté Ansible a packagé des modules et des playbooks pour les tâches les plus courantes\footnote{Ansible Galaxy, \url{https://galaxy.ansible.com/ui/}}.
         Ils sont disponibles sur la \href{https://galaxy.ansible.com/}{Ansible Galaxy}.
-        Et peuvent être installé avec la commande \lstinline{ansible-galaxy install <module>}, commande issue du package \lstinline{ansible-core}.
+        Et peuvent être installés avec la commande \lstinline{ansible-galaxy install <module>}, commande issue du package \lstinline{ansible-core}.
     \end{frame}
 
     \begin{frame}
@@ -604,7 +626,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
 
         Ce n'est donc pas obliger d'utiliser un système de build comme Maven ou Gradle sur la VM, Java suffit pour exécuter une JAR~.
 
-        Une JAR (Java ARchive) est un exécutable qui contient toutes les classes zippées qui se lance avec \lstinline{java -jar <JAR file>}.
+        Une JAR (Java ARchive) est un exécutable qui contient toutes les classes zippées et qui se lance avec \lstinline{java -jar <JAR file>}.
         \bigbreak
         Par exemple Java 17~:
         \begin{lstlisting}
@@ -633,7 +655,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
 
         Ces technologies sont donc compatibles avec le cloud et le on-premise.
 
-        On a donc un déploiement sécurité et agnostique à une infrastructure.
+        On a donc un déploiement sécurisé et agnostique à une infrastructure.
     \end{frame}
 
 
@@ -665,7 +687,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         \transdissolve
         \frametitle{Docker}
         \framesubtitle{Définition}
-        Il permet en théorie le déploiement de n'importe quelle application sur n'importe quelle architecture (OS, ISA)\footnote{Docker official Images, \url{https://github.com/docker-library/official-images\#architectures-other-than-amd64}}~:
+        Il permet, en théorie, le déploiement de n'importe quelle application sur n'importe quelle architecture (OS, ISA)\footnote{Docker official Images, \url{https://github.com/docker-library/official-images\#architectures-other-than-amd64}}~:
         \bigbreak
         \begin{columns}
             \column{0.4\textwidth}
@@ -696,7 +718,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         \framesubtitle{Définir l'image dans un Dockerfile}
         L'essentiel de la Dockerfile~:
         \begin{itemize}
-            \item Le nom de fichier par convention est \lstinline{Dockerfile}.
+            \item Le nom de fichier par convention est \lstinline{Dockerfile} mais peut être différent.
             \item Il vient surcharger une image de base définit dans \lstinline{FROM}.
             \item On peut y définir des variables d'environnement avec \lstinline{ENV}.
             \item La commande \lstinline{RUN} permet d'exécuter des commandes dans l'image.
@@ -742,16 +764,16 @@ EXPOSE 5000/tcp
         \frametitle{Le Docker hub}
         \framesubtitle{\textit{Docker Hub is the world's easiest way to create, manage, and deliver your team's container applications}}
         Encore une fois, inutile de tout recoder.
-        On vient en premier trouver une image la plus complète possible pour son application.
+        On vient en premier lieu trouver une image la plus complète possible pour son application.
         \bigbreak
-        Il probablement une image pour quasi toutes les stacks existantes.
+        Il y a probablement une image pour quasi toutes les stacks existantes.
         \bigbreak
         En terme de cybersécurité, veillez à auditer les développeurs des images pour ne pas subir une \textit{supply chain attack}.
 
         Une des bonnes pratiques est d'utiliser des images officielles.
         Par exemple pour Tensorflow, le développeur est Google, etc.
         \bigbreak
-        Concernant les performances les images basées sur Alpine Linux sont souvent plus légères développées autour de \lstinline{musl libc} et busybox.
+        Concernant les performances, les images basées sur Alpine Linux sont souvent plus légères car l'OS est développées autour de \lstinline{musl libc} et busybox.
     \end{frame}
 
     \begin{frame}
@@ -802,7 +824,7 @@ EXPOSE 5000/tcp
         \transdissolve
         \frametitle{Docker, trouver la bonne image}
         \framesubtitle{Exercice}
-        Sur le Docker Hub les images pour les applications suivantes:
+        Sur le Docker Hub, trouvez les images pour les applications suivantes:
         \begin{itemize}
             \item Une application NodeJS~.
             \item Une application Flask.
@@ -816,7 +838,7 @@ EXPOSE 5000/tcp
         \frametitle{Docker compose}
         \framesubtitle{Le fichier de configuration Docker Compose\footnote{docker compose, \url{https://docs.docker.com/reference/cli/docker/compose/}}}
         Le fichier \lstinline{docker compose.yml} permet de définir comment les conteneurs communiquent entre eux et avec la machine.
-        Limiter les ressources CPU, mémoire prise sur la machine.
+        Limiter les ressources CPU et mémoire prise sur la machine.
         \bigbreak
         Pour les applications web par exemple, il faut définir les ports qui seront exposés par les conteneurs~:
         \begin{lstlisting}
@@ -889,6 +911,136 @@ services:
 volumes:
   db_data: {}
         \end{lstlisting}
+    \end{frame}
+
+
+    \section{Kubernetes}\label{sec:kubernetes}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Définition et histoire\footnote{Qu'est ce que Kubernetes, \url{https://kubernetes.io/fr/docs/concepts/overview/what-is-kubernetes/}}}
+        \begin{columns}
+            \column{0.5\textwidth}
+            Kubernetes est un orchestrateur de conteneurs open-source.
+            Il permet de déployer, de gérer et de \textbf{scaler} des applications conteneurisées.
+            \bigbreak
+            Créé et libéré en open source par Google en 2014, il est maintenant maintenu par la Cloud Native Computing Foundation (CNCF) de la Linux Foundation.
+            \bigbreak
+            Aussi appelé par son abréviation \textquote{K8s} comme k de K, 8 lettres puis un s.
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=6cm]{image/kubernetes-logo.png}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Les termes clés\footnote{\label{k8soracle}Qu’est-ce que Kubernetes ?, \url{https://www.oracle.com/fr/cloud/cloud-native/container-engine-kubernetes/what-is-kubernetes/}}}
+        \begin{itemize}
+            \item \textbf{Cluster}~: Ensemble de machines, appelées individuellement « nœuds », utilisées pour exécuter des applications conteneurisées gérées par Kubernetes.
+            \item \textbf{Node}~: Il s'agit d'une machine virtuelle ou physique.
+            Un cluster se compose d'un nœud maître et de plusieurs nœuds de travail.
+            \item \textbf{Pod}~: Conteneur unique ou ensemble de conteneurs s’exécutant sur un cluster Kubernetes.
+            \item \textbf{Volume}~: Un répertoire qui contient des données accessibles par les conteneurs.
+            \item \textbf{Deployment}~: Objet qui gère les applications répliquées représentées par des pods.
+            Les pods sont déployés sur les nœuds d’un cluster.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Kubernetes Components\footnote{\label{k8scompnents}Kubernetes – Introduction à l’architecture et aux composants, \url{https://kubernetes.io/docs/concepts/overview/components/}}}
+        \begin{itemize}
+            \item \textbf{kube-apiserver}~: Composant central qui fournit l'API Kubernetes.
+            \item \textbf{etcd}~: Stockage de données clé-valeur.
+            \item \textbf{kube-scheduler}~: Ordonnanceur qui distribue les pods sur les nœuds.
+            \item \textbf{kube-controller-manager}~: Composant qui exécute les contrôleurs.
+            \item \textbf{kubelet}~: Agent qui s'exécute sur chaque nœud du cluster.
+            Il s'assure que les conteneurs sont en cours d'exécution dans un pod.
+            \item \textbf{Kube-proxy}~: Proxy réseau qui s'exécute sur chaque nœud du cluster.
+            \item \textbf{Container runtime}~: Gère les exécutions de manière \textquote{efficace} et leur cycle de vie des conteneurs dans l'environnement K8s.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Architectures\cref{k8scompnents}}
+        \centering
+        \includegraphics[width=10cm]{image/components-of-kubernetes.png}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Addons et third party\footnote{Installing Addons, \url{https://kubernetes.io/docs/concepts/cluster-administration/addons/}}}
+        Développé par la communauté Kubernetes, ils apportent des fonctionnalités supplémentaires à Kubernetes.
+        \bigbreak
+        Ceux proposés par la documentation officielle \url{https://kubernetes.io/docs/concepts/cluster-administration/addons/}.
+
+        D'autres sont disponibles sur le \href{https://hub.kubeapps.com/}{Kubeapps} une application Kubernetes.
+        \bigbreak
+        Mais bien d'autres ont été mis en open source, pas de ledger unique trouvé à l'heure actuelle.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Les types de conteneurs supportés\footnote{Container Runtimes, \url{https://kubernetes.io/docs/setup/production-environment/container-runtimes/}}}
+        Kubernetes supporte plusieurs runtimes de conteneurs~:
+        \begin{itemize}
+            \item Docker
+            \item Containerd
+            \item CRI-O
+            \item Mirantis Container Runtime
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Les interfaces}
+        \begin{columns}
+            \column{0.5\textwidth}
+            Le dashboard Kubernetes est une interface web qui permet de gérer les ressources du cluster\footnotemark.
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=5cm]{image/kubernetes-dashboard.png}
+        \end{columns}
+        \footnotetext{Container Runtimes, \url{https://kubernetes.io/fr/docs/tasks/access-application-cluster/web-ui-dashboard/}}
+        \flushleft
+        \bigbreak
+        Il existe également une CLI, \lstinline{kubectl} qui permet de gérer le cluster, elle utilise la Kubernetes API\footnote{\url{https://kubernetes.io/docs/reference/kubectl/}}.
+        \bigbreak
+        La Kubernetes API qui rend le cluster accessible depuis la plupart des langages de programmation.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Kubernetes}
+        \framesubtitle{Les différentes versions\footnote{How to deploy Kubernetes, \url{https://ubuntu.com/kubernetes/install}}}
+        Il existe plusieurs distributions de Kubernetes~:
+        \begin{itemize}
+            \item \textbf{MicroK8s} pour des clusters de petites et moyenne taille.
+            \item \textbf{Charmed Kubernetes} pour des cluster moyen et gros.
+            \item \textbf{Kubeadm} un DIY Kubernetes configurable.
+            \item Many more...
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Exercice de déploiement dans Kubernetes}
+        \framesubtitle{Exercice évalué sur le déploiement d'une application Spring Boot dans Kubernetes}
+        Exécuter l'application Spring Boot \textquote{Dockerisée} de l'avant dernier exercice dans le MicroK8s de la VM du cluster Proxmox.
+        \bigbreak
+        L'application doit être accessible sur le réseau de St-Michel.
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/maniac-programmer-sorting-her-code.png}
     \end{frame}
 
 \end{document}
