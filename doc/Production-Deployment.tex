@@ -14,8 +14,8 @@
 
 \titlegraphic{
     \bigbreak
-    \includegraphics[width=2cm]{image/logo-papit.png}
-    \includegraphics[width=2cm]{image/logo-campus-saint-michel-it.png}
+    \includegraphics[width=2cm]{image/logo-papit}
+    \includegraphics[width=2cm]{image/logo-campus-saint-michel-it}
 }
 \begin{document}
 
@@ -44,7 +44,7 @@
         \end{itemize}
         \bigbreak
         \centering
-        \includegraphics[width=5cm]{image/engraving-of-egyptian-workers-pulling-stones.png}
+        \includegraphics[width=5cm]{image/engraving-of-egyptian-workers-pulling-stones}
     \end{frame}
 
     \begin{frame}
@@ -106,15 +106,15 @@
                 \begin{columns}
                     \column{0.5\textwidth}
                     \centering
-                    \includegraphics[width=3cm]{image/logo-uppa.png}
+                    \includegraphics[width=3cm]{image/logo-uppa}
                     \column{0.5\textwidth}
                     \centering
-                    \includegraphics[width=3cm]{image/logo-universite-bordeaux.png}
+                    \includegraphics[width=3cm]{image/logo-universite-bordeaux}
                 \end{columns}
             \end{itemize}
             \column{0.3\textwidth}
             \centering
-            \includegraphics[width=5cm]{image/trombine-christophe.jpg}
+            \includegraphics[width=5cm]{image/trombine-christophe}
         \end{columns}
     \end{frame}
 
@@ -182,7 +182,7 @@
         Certaines ont abstraient le hardware voir même une partie du software pour ne laisser que l'application.
         \bigbreak
         \centering
-        \includegraphics[width=6cm]{image/cloud-stacks.png} \\ IAAS, PAAS et SAAS\\
+        \includegraphics[width=6cm]{image/cloud-stacks} \\ IAAS, PAAS et SAAS\\
         \flushleft
         On voit que SAAS et Paas ont fait abstraction du hardware\footnote{\label{arcuscloud}Patel et al., \url{https://www.researchgate.net/publication/324692035_Arcus_Cloud_A_Private_Cloud_Establishment}}.
     \end{frame}
@@ -198,10 +198,10 @@
         \begin{columns}
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=3cm]{image/ovh-public-mysql.png} \\ MySQL sur le cloud public OVH \\
+            \includegraphics[width=3cm]{image/ovh-public-mysql} \\ MySQL sur le cloud public OVH \\
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=5cm]{image/ibm-public-mysql.png} \\ MySQL sur le cloud public IBM \\
+            \includegraphics[width=5cm]{image/ibm-public-mysql} \\ MySQL sur le cloud public IBM \\
         \end{columns}
         \flushleft
         \bigbreak
@@ -262,7 +262,7 @@
         Un OS hôte fait tourner un hyperviseur qui lui fait tourner des VM et plus juste un soft compilé.
         \bigbreak
         \centering
-        \includegraphics[width=6cm]{image/virtualisation.png}
+        \includegraphics[width=6cm]{image/virtualisation}
     \end{frame}
 
     \begin{frame}
@@ -277,7 +277,7 @@
             Contrairement à un hyperviseur de type 2, qui doit passer par l'OS hôte pour accéder au hardware mais ces derniers ont donc une meilleurs portabilité et compatibilité.
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=6cm]{image/kvm-qemu.png}
+            \includegraphics[width=6cm]{image/kvm-qemu}
         \end{columns}
         \bigbreak
         Qemu lui peut faire tourner des VM avec ou sans KVM en fonction des besoins.
@@ -297,7 +297,7 @@
             \end{itemize}
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=6cm]{image/question-mark-on-a-blank-background.png}
+            \includegraphics[width=6cm]{image/question-mark-on-a-blank-background}
         \end{columns}
         \footnotetext{\url{https://unix.stackexchange.com/questions/340912/qemu-with-kvm-with-differaing-host-guest-architectures}}
     \end{frame}
@@ -504,7 +504,7 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.s
         Il permet de définir des \textquote{playbooks} qui décrivent une configuration à appliquer aux machines qui sont dans l'\textquote{inventory} .
         \bigbreak
         \centering
-        \includegraphics[width=5cm]{image/ansible.png}
+        \includegraphics[width=5cm]{image/ansible}
     \end{frame}
 
     \begin{frame}[fragile]
@@ -540,7 +540,7 @@ localhost | SUCCESS => {
         Pourquoi Ansible n'a aucun client sur les machines de l'inventaire~?
         \bigbreak
         \centering
-        \includegraphics[width=5cm]{image/question-mark-on-a-blank-background.png}
+        \includegraphics[width=5cm]{image/question-mark-on-a-blank-background}
         \bigbreak
         \pause
         \flushleft
@@ -614,37 +614,47 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         Vous pouvez vous aider du \href{https://spring.io/guides/gs/spring-boot}{tutoriel officiel}.
         \bigbreak
         \centering
-        \includegraphics[width=8cm]{image/most-popular-backend.jpg}
+        \includegraphics[width=8cm]{image/most-popular-backend}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Solution à l'exercice}
+        De nombreuses solutions sont valides.
+        Mais avec Java il est plus simple de profiter du \textquote{Write once, run anywhere}.
+        \bigbreak
+        Ce n'est donc pas obliger d'utiliser un système de build comme Maven ou Gradle sur la VM, Java suffit pour exécuter une JAR~.
+        \bigbreak
+        Une JAR (Java ARchive) est un exécutable qui contient toutes les classes zippées et qui se lance avec \lstinline{java -jar <JAR file>}.
+        Il suffit donc d'installer Java sur la JVM~.
     \end{frame}
 
     \begin{frame}[fragile]
         \transdissolve
         \frametitle{Automatisation de la configuration avec Ansible}
         \framesubtitle{Solution à l'exercice}
-        De nombreuses solutions sont valides.
-        Mais avec Java il est plus simple de profiter du \textquote{Write once, run anywhere}.
-
-        Ce n'est donc pas obliger d'utiliser un système de build comme Maven ou Gradle sur la VM, Java suffit pour exécuter une JAR~.
-
-        Une JAR (Java ARchive) est un exécutable qui contient toutes les classes zippées et qui se lance avec \lstinline{java -jar <JAR file>}.
-        \bigbreak
-        Par exemple Java 17~:
-            \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+        Par exemple, une solution avec uniquement Java 17~:
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
 ---
 - hosts: gunicorn
+  vars:
+  - JAR_DEST_PATH: /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar
   become: yes
   tasks:
   - name: Install Java 17
     apt:
       name: openjdk-17-jdk
       state: present
+
   - name: Copy Spring Boot Application
     copy:
       src: /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/helloworld/build/libs/helloworld-0.0.1-SNAPSHOT.jar
-      dest: /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar
+      dest: "{{ JAR_DEST_PATH }}"
+
   - name: Run Spring Boot Application
-    shell: nohup java -jar /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar &
-            \end{lstlisting}
+    shell: nohup java -jar {{ JAR_DEST_PATH }} &
+        \end{lstlisting}
     \end{frame}
 
 
@@ -682,7 +692,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         \begin{columns}
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=5cm]{image/docker-vs-vm.png}\footnotemark
+            \includegraphics[width=5cm]{image/docker-vs-vm}\footnotemark
             \column{0.5\textwidth}
             Il utilise des outils de la machine, du kernel, \lstinline{chroot} et des librairies de la machine hôte pour fonctionner mais ne fait pas tourner un autre OS contrairement à la virtualisation.
         \end{columns}
@@ -714,7 +724,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
             \end{scriptsize}
             \column{0.6\textwidth}
             \centering
-            \includegraphics[width=6cm]{image/it-works.png}
+            \includegraphics[width=6cm]{image/it-works}
         \end{columns}
     \end{frame}
 
@@ -811,7 +821,7 @@ EXPOSE 5000/tcp
         Sur la machine de production le Docker Engine suffit.
         \bigbreak
         \centering
-        \includegraphics[width=8cm]{image/docker-desktop.png}
+        \includegraphics[width=8cm]{image/docker-desktop}
     \end{frame}
 
     \begin{frame}
@@ -823,7 +833,7 @@ EXPOSE 5000/tcp
         Pensez à optimiser l'image pour qu'elle soit la plus légère possible et le plus sécurisé possible\ldots
         \bigbreak
         \centering
-        \includegraphics[width=5cm]{image/young-studying.png}
+        \includegraphics[width=5cm]{image/young-studying}
     \end{frame}
 
     \begin{frame}
@@ -890,32 +900,30 @@ dockerfile: docker/Dockerfile.production
         Un Docker compose pour un site Wordpress, ce dernier a besoin d'une base de données MySQL~.
         \pause
         \begin{lstlisting}[basicstyle=\ttfamily\tiny]
-version: "3.9"
 services:
-db:
-image: mysql:5.7
+  db:
+    image: 'mysql:8'
+    volumes:
+      - 'db_data:/var/lib/mysql'
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+  wordpress:
+    depends_on:
+      - db
+    image: 'wordpress:latest'
+    ports:
+      - '8000:80'
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: 'db:3306'
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
 volumes:
-- db_data:/var/lib/mysql
-restart: always
-environment:
-MYSQL_ROOT_PASSWORD: somewordpress
-MYSQL_DATABASE: wordpress
-MYSQL_USER: wordpress
-MYSQL_PASSWORD: wordpress
-wordpress:
-depends_on:
-- db
-image: wordpress:latest
-ports:
-- "8000:80"
-restart: always
-environment:
-WORDPRESS_DB_HOST: db:3306
-WORDPRESS_DB_USER: wordpress
-WORDPRESS_DB_PASSWORD: wordpress
-WORDPRESS_DB_NAME: wordpress
-volumes:
-db_data: {}
+  db_data: null
         \end{lstlisting}
     \end{frame}
 
@@ -936,7 +944,7 @@ db_data: {}
             Aussi appelé par son abréviation \textquote{K8s} comme k de K, 8 lettres puis un s.
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=6cm]{image/kubernetes-logo.png}
+            \includegraphics[width=6cm]{image/kubernetes-logo}
         \end{columns}
     \end{frame}
 
@@ -976,7 +984,7 @@ db_data: {}
         \frametitle{Kubernetes}
         \framesubtitle{Architectures\cref{k8scompnents}}
         \centering
-        \includegraphics[width=10cm]{image/components-of-kubernetes.png}
+        \includegraphics[width=10cm]{image/components-of-kubernetes}
     \end{frame}
 
     \begin{frame}
@@ -984,6 +992,7 @@ db_data: {}
         \frametitle{Kubernetes}
         \framesubtitle{Addons et third party\footnote{Installing Addons, \url{https://kubernetes.io/docs/concepts/cluster-administration/addons/}}}
         Développé par la communauté Kubernetes, ils apportent des fonctionnalités supplémentaires à Kubernetes.
+        Comme par exemple l'add-on registry qui permet de stocker les images des conteneurs\footnote{How to use the built-in registry, \url{https://microk8s.io/docs/registry-built-in}}.
         \bigbreak
         Ceux proposés par la documentation officielle \url{https://kubernetes.io/docs/concepts/cluster-administration/addons/}.
 
@@ -1014,7 +1023,7 @@ db_data: {}
             Le dashboard Kubernetes est une interface web qui permet de gérer les ressources du cluster\footnotemark.
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=5cm]{image/kubernetes-dashboard.png}
+            \includegraphics[width=5cm]{image/kubernetes-dashboard}
         \end{columns}
         \footnotetext{Container Runtimes, \url{https://kubernetes.io/fr/docs/tasks/access-application-cluster/web-ui-dashboard/}}
         \flushleft
@@ -1033,8 +1042,17 @@ db_data: {}
             \item \textbf{MicroK8s} pour des clusters de petites et moyenne taille.
             \item \textbf{Charmed Kubernetes} pour des cluster moyen et gros.
             \item \textbf{Kubeadm} un DIY Kubernetes configurable.
-            \item Many more...
+            \item Many more\ldots
         \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Infrastructure Kubernetes de St-Michel}
+        \framesubtitle{Instance Micro-K8s dédiée aux exercices}
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/infra.drawio}
     \end{frame}
 
     \begin{frame}
@@ -1046,7 +1064,153 @@ db_data: {}
         L'application doit être accessible sur le réseau de St-Michel.
         \bigbreak
         \centering
-        \includegraphics[width=5cm]{image/maniac-programmer-sorting-her-code.png}
+        \includegraphics[width=5cm]{image/maniac-programmer-sorting-her-code}
+    \end{frame}
+
+
+    \section{OpenStack}\label{sec:openstack}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Définition\footnote{\label{OpenStackhome}OpenStack, \url{https://www.OpenStack.org/}}}
+        C'est un logiciel de gestion de cloud, un \textquote{Cloud software}.
+        On peut aussi dire que c'est un OS de cloud.
+        \bigbreak
+        \textquote{OpenStack is a set of software components that provide common services for cloud infrastructure.}
+        \bigbreak
+        \textquote{Cloud Infrastructure for Virtual Machines, Bare Metal, and Containers}.
+        \bigbreak
+        \textquote{OpenStack controls large pools of compute, storage, and networking resources, all managed through APIs or a dashboard.}
+        \bigbreak
+        Il est en open source sous licence Apache 2.0 \textquote{OpenStack is developed by the community. For the community...}.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Définition\cref{OpenStackhome}}
+        \bigbreak
+        \centering
+        \includegraphics[width=8cm]{image/openstack-overview}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Histoire\footnote{Introduction: A Bit of OpenStack History, \url{https://docs.OpenStack.org/project-team-guide/introduction.html}}}
+
+        \begin{columns}
+            \column{0.7\textwidth}
+            Né de la convergence des travaux de Rackspace Technology et de la NASA en 2010.
+            \bigbreak
+            La mission initiale est \textquote{to produce a ubiquitous Open Source Cloud Computing platform that is easy to use, simple to implement, interoperable between deployments, works well at all scales, and meets the needs of users and operators of both public and private clouds}.
+            \column{0.3\textwidth}
+            \centering
+            \includegraphics[width=3cm]{image/openstack-supports} \\ \tiny{Une partie des supports en 2024}\\
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Les composants principaux}
+        C'est un ensemble services, de composants qui s'assemblent de manière \textquote{plug and play} en fonction des besoins.
+        Encore une fois, c'est modulaire\ldots
+        \bigbreak
+        \centering
+        \includegraphics[width=9cm]{image/openstack-components}
+        \bigbreak
+        \flushleft
+        La liste complète des composants est sur le \href{https://www.OpenStack.org/software/project-navigator/OpenStack-components\#OpenStack-services}{site officiel}.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Les interfaces\footnote{\label{OpenStackservices}OpenStack Services, \url{https://www.OpenStack.org/software/project-navigator/OpenStack-components\#OpenStack-services}}\footnote{Client tools, \url{https://www.OpenStack.org/software/project-navigator/sdks}}}
+        Les UI web~:
+        \begin{itemize}
+            \item \textbf{Horizon}~: Le tableau de bord web d'OpenStack.
+            \item \textbf{Skyline}~: \textquote{Next generation dashboard}.
+        \end{itemize}
+        \bigbreak
+        Une CLI à installer avec \lstinline{pip install python-OpenStackclient}.
+        \bigbreak
+        Un SDK Python pour les APIs OpenStack.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Résumé des fonctionnalités\footnote{\label{redhatopentack}OpenStack, qu'est-ce que c'est ?, \url{https://www.redhat.com/fr/topics/OpenStack}}}
+        \begin{itemize}
+            \item Permet de gérer des clouds privés ou publics.
+            \item Virtualisation des ressources.
+            \item Stockage objet, bloc et fichier avec \textbf{Swift} et \textbf{Cinder}.
+            \item L'authentification et les autorisations avec \textbf{Keystone}.
+            \item Le réseau avec \textbf{Neutron}.
+            \item Les ressources de calcul avec \textbf{Nova}.
+            \item Gestion des conteneurs (Docker entre autre) avec \textbf{Zun}.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Commandes de base\footnote{\label{opentackcommand}OpenStack, qu'est-ce que c'est ?, \url{https://www.redhat.com/fr/topics/OpenStack}}}
+        Pour ajouter une image à OpenStack~:
+        \begin{lstlisting}
+$ OpenStack image create <IMAGE> --disk-format raw \
+  --container-format bare --public \
+  --file ~/images/cirros-0.3.5-x86_64-disk.img
+        \end{lstlisting}
+        Pour créer un type d'instance, appelé \textquote{flavor}~:
+        Pour lancer une instance~:
+        \begin{lstlisting}
+OpenStack flavor create --ram 512 --disk 1 --vcpus 1 <FLAVOR INSTANCE_NAME>
+        \end{lstlisting}
+        Pour lancer une instance~:
+        \begin{lstlisting}
+$ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
+        \end{lstlisting}
+        \bigbreak
+        Toutes les commandes dans la \href{https://docs.OpenStack.org/ocata/user-guide/cli-cheat-sheet.html}{documentation officielle}.
+    \end{frame}
+    \begin{frame}
+        \transdissolve
+        \frametitle{Infrastructure OpenStack de St-Michel}
+        \framesubtitle{Instance OpenStack dans une VM dédiée aux exercices}
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/infra.drawio}
+    \end{frame}
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Exercice}
+        \begin{itemize}
+            \item Créer l'image de l'application Spring Boot dans OpenStack.
+            \item Créer un flavor de 1 vCPU et 1 Go de RAM~.
+            \item Lancer une instance de l'application Spring Boot.
+            \item Faire un snapshot de l'instance.
+            \item Stopper l'instance.
+            \item Relancer l'instance.
+        \end{itemize}
+        Réalisez ces tâches avec la CLI OpenStack et listez les commandes pour l'évaluation.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{OpenStack}
+        \framesubtitle{Exercice}
+        \begin{itemize}
+            \item Créer un registre de conteneur dans OpenStack.
+            \item Pousser le conteneur de l'application Spring Boot dans le registre OpenStack.
+            \item Lancer un conteneur de l'application Spring Boot avec 1 vCPU et 1 Go de RAM maximum.
+            \item Stopper le conteneur.
+        \end{itemize}
+        Réalisez ces tâches avec la CLI OpenStack et listez les commandes pour l'évaluation.
     \end{frame}
 
 \end{document}
