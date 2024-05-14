@@ -745,7 +745,6 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
             \item La commande \lstinline{ADD} permet de copier des fichiers dans l'image et de les décompresser.
             \item \textit{Many more\ldots}\footnote{Dockerfile reference, \url{https://docs.docker.com/reference/dockerfile/}}
         \end{itemize}
-
     \end{frame}
 
     \begin{frame}[fragile]
@@ -826,18 +825,6 @@ EXPOSE 5000/tcp
 
     \begin{frame}
         \transdissolve
-        \frametitle{Docker, créer une image}
-        \framesubtitle{Exercice}
-        Développer une image Docker pour une application Spring Boot, la même qu'à l'exercice précédent.
-        \bigbreak
-        Pensez à optimiser l'image pour qu'elle soit la plus légère possible et le plus sécurisé possible\ldots
-        \bigbreak
-        \centering
-        \includegraphics[width=5cm]{image/young-studying}
-    \end{frame}
-
-    \begin{frame}
-        \transdissolve
         \frametitle{Docker, trouver la bonne image}
         \framesubtitle{Exercice}
         Sur le Docker Hub, trouvez les images pour les applications suivantes:
@@ -849,30 +836,75 @@ EXPOSE 5000/tcp
         \end{itemize}
     \end{frame}
 
+    \begin{frame}
+        \transdissolve
+        \frametitle{Docker, créer une image}
+        \framesubtitle{Exercice}
+        Développer une image Docker pour une application Spring Boot, la même qu'à l'exercice précédent.
+        \bigbreak
+        Pensez à optimiser l'image pour qu'elle soit la plus légère possible et le plus sécurisé possible\ldots
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/young-studying}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Docker, créer une image}
+        \framesubtitle{Une solution possible de l'exercice}
+        Avec uniquement une image Eclipse Temurin basée sur une distribution Alpine Linux comme par exemple l'image Docker \textbf{officielle} \lstinline{eclipse-temurin:17-alpine} on génère une image de \textquote{seulement} ~360 Mo\ldots.
+        \bigbreak
+        \fbox{%
+            \begin{minipage}{0.95\textwidth}
+                Eclipse Temurin est une JVM maintenue par la Fondation Eclipse, elle offre des performances élevées, la compilation en exécutable et est Java SE TCK (Technology Compatibility Kit).
+            \end{minipage}
+        }
+        \bigbreak
+        C'est donc une image de choix en terme de taille, sécurité et performance.
+        \begin{lstlisting}
+FROM eclipse-temurin:17-alpine # L'image de base
+EXPOSE 8081 # Le port du serveur Spring
+# Le fichier JAR
+COPY helloworld/build/libs/helloworld-0.0.1-SNAPSHOT.jar /app/spring-boot.jar
+# Exécution de la JAR
+CMD ["java", "-jar", "/app/spring-boot.jar"]
+        \end{lstlisting}
+    \end{frame}
+
     \begin{frame}[fragile]
         \transdissolve
         \frametitle{Docker compose}
-        \framesubtitle{Le fichier de configuration Docker Compose\footnote{docker compose, \url{https://docs.docker.com/reference/cli/docker/compose/}}}
+        \framesubtitle{Le fichier de configuration Docker Compose\footnote{Networking in Compose, \url{https://docs.docker.com/compose/networking/}}}
         Le fichier \lstinline{docker compose.yml} permet de définir comment les conteneurs communiquent entre eux et avec la machine.
         Limiter les ressources CPU et mémoire prise sur la machine.
         \bigbreak
         Pour les applications web par exemple, il faut définir les ports qui seront exposés par les conteneurs~:
         \begin{lstlisting}
 services:
-webapp:
-image: examples/web
-ports:
-- "8000:8000"
-volumes:
-- "/data"
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+  db:
+    image: postgres
+    ports:
+      - "8001:5432"
         \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Docker compose}
+        \framesubtitle{Le fichier de configuration Docker Compose\footnote{Compose Build Specification, \url{https://docs.docker.com/compose/compose-file/build/}]}}
         On y définit aussi le(s) Dockerfile(s)~:
         \begin{lstlisting}
+version: "3"
+
 services:
-client:
-build:
-context: ../
-dockerfile: docker/Dockerfile.production
+  client:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.production
         \end{lstlisting}
     \end{frame}
 
@@ -903,14 +935,16 @@ dockerfile: docker/Dockerfile.production
 services:
   db:
     image: 'mysql:8'
+    env_file:
+      - .env
     volumes:
       - 'db_data:/var/lib/mysql'
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: somewordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: k36FbP3NH3J8
+      MYSQL_DATABASE: ${WORDPRESS_DB_USER}
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
   wordpress:
     depends_on:
       - db
@@ -920,10 +954,22 @@ services:
     restart: always
     environment:
       WORDPRESS_DB_HOST: 'db:3306'
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
 volumes:
   db_data: null
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Docker compose}
+        \framesubtitle{Exercice, développer une configuration Docker Compose}
+        Des variables d'environnement comme les mots de passe, etc, sont définies dans un fichier \lstinline{.env}.
+        \bigbreak
+        Pas de build de Dockerfile donc une seule commande suffit pour lancer Wordpress~:
+        \begin{lstlisting}[language=bash]
+$ docker compose up
         \end{lstlisting}
     \end{frame}
 
@@ -1059,12 +1105,39 @@ volumes:
         \transdissolve
         \frametitle{Exercice de déploiement dans Kubernetes}
         \framesubtitle{Exercice évalué sur le déploiement d'une application Spring Boot dans Kubernetes}
-        Exécuter l'application Spring Boot \textquote{Dockerisée} de l'avant dernier exercice dans le MicroK8s de la VM du cluster Proxmox.
+        Pousser l'image sur le registry de MicroK8s et exécuter l'application Spring Boot \textquote{Dockerisée} de l'avant dernier exercice dans le MicroK8s de la VM du cluster Proxmox.
         \bigbreak
         L'application doit être accessible sur le réseau de St-Michel.
         \bigbreak
         \centering
         \includegraphics[width=5cm]{image/maniac-programmer-sorting-her-code}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Exercice de déploiement dans Kubernetes}
+        \framesubtitle{Solution de l'exercice}
+        L'image est buildée et tagger sur la machine du développeur~:
+        \begin{lstlisting}[language=bash]
+$ docker build -t 10.172.74.134:32000/my-fancy-app:1.0.0 .
+        \end{lstlisting}
+        Poussée sur le registry de MicroK8s~:
+        \begin{lstlisting}[language=bash]
+$ docker push 10.172.74.134:32000/my-fancy-app:1.0.0
+The push refers to repository [10.172.74.134:32000/my-fancy-app]
+0c4cac1d4e27: Pushed
+5a8f0ac5756e: Pushed
+...
+        \end{lstlisting}
+        Configuration du déploiement dans la web UI~:
+        \begin{columns}
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=5.5cm]{image/k8s-deployment-configuration}
+            \column{0.5\textwidth}
+            \centering
+            \includegraphics[width=5.5cm]{image/k8s-services}
+        \end{columns}
     \end{frame}
 
 
