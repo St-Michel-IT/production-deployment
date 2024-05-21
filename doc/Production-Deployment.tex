@@ -593,6 +593,31 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         A la première exécution, le package est installé, à la seconde il est déjà installé, aucun changement.
     \end{frame}
 
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Commande pour exécuter un programme}
+        Une fois les dépendances requises installées, on peut exécuter un programme avec le module \lstinline{shell}~.
+        \bigbreak
+        Si il faut copier un ou plusieurs fichiers, on peut utiliser le module \lstinline{copy}~.
+        \bigbreak
+        Par exemple~:
+        \begin{lstlisting}
+---
+- hosts: gunicorn # Groupe de host de l'inventory
+  vars:
+  - EXEC_ABS_PATH: /home/chrichri/helloworld # Utilisé 2 fois donc dans une variable
+...
+  - name: Copy Application
+    copy:
+      src: /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/helloworld/build/helloworld # Le build de ma machine
+      dest: "{{ EXEC_ABS_PATH }}"
+
+  - name: Run Application
+    shell: nohup {{ EXEC_ABS_PATH }} & # nohup pour exécuter en arrière plan
+        \end{lstlisting}
+    \end{frame}
+
     \begin{frame}
         \transdissolve
         \frametitle{Automatisation de la configuration avec Ansible}
@@ -603,6 +628,19 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         La communauté Ansible a packagé des modules et des playbooks pour les tâches les plus courantes\footnote{Ansible Galaxy, \url{https://galaxy.ansible.com/ui/}}.
         Ils sont disponibles sur la \href{https://galaxy.ansible.com/}{Ansible Galaxy}.
         Et peuvent être installés avec la commande \lstinline{ansible-galaxy install <module>}, commande issue du package \lstinline{ansible-core}.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Automatisation de la configuration avec Ansible}
+        \framesubtitle{Ansible et Windows}
+        Sur la machine hôte, on ne peut l'installer que depuis un WSL~.
+        \begin{dangercolorbox}
+            Si la machine cliente est un Windows, attention au package manager et aux séparateurs de chemin, voir \url{https://docs.ansible.com/ansible/latest/os_guide/windows_usage.html}.
+        \end{dangercolorbox}
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/broken-windows} \\ L'idéal reste quand même de ne pas utiliser Windows\ldots \\
     \end{frame}
 
     \begin{frame}
