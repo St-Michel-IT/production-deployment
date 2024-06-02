@@ -1324,4 +1324,64 @@ $ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
         Réalisez ces tâches avec la CLI OpenStack et listez les commandes pour l'évaluation.
     \end{frame}
 
+
+    \section{Serveur Web Apache et Nginx}\label{sec:serveur-web-apache-et-nginx}
+
+    \subsection{Généralités}\label{subsec:generalites}
+    \begin{frame}
+        \transdissolve
+        \frametitle{Serveur Web Apache et Nginx}
+        \framesubtitle{Généralités}
+        Sont souvent appelés serveur web mais font en réalité bien plus que serveur HTTP de contenu statique.
+        \bigbreak
+        \setlength\parindent{24pt}Apache peut servir du contenu dynamique grâce aux modules \lstinline{mod_cgi}/\lstinline{mod_cgid}\footnote{Contenu dynamique basé sur CGI, \url{https://httpd.apache.org/docs/2.4/fr/howto/cgi.html}}.
+        De même sous Nginx (ɛndʒɪn'ɛks) avec le package \lstinline{fcgiwrap}\footnote{Serving CGI Scripts With Nginx On Debian Squeeze/Ubuntu 11.04, \url{https://www.howtoforge.com/serving-cgi-scripts-with-nginx-on-debian-squeeze-ubuntu-11.04-p3}}.
+        \bigbreak
+        Apache peut-être programmer en Python grâce à son API Python disponible dans le module \lstinline{mod_cgi}\footnote{Mod\_python Documentation, Tutorial, \url{https://modpython.org/live/current/doc-html/tutorial.html}}.
+        Similaire au module \lstinline{ngx_python_module} de Nginx\footnote{Nginx Python Module, \footnote{Nginx Python Module, \url{https://github.com/arut/nginx-python-module}}}.
+        \setlength\parindent{0pt}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Serveur Web Apache et Nginx}
+        \framesubtitle{Généralités}
+        Les moyens utilisés ont les mêmes capacités mais les performances diffèrent\footnote{Mod\_python Performance Part 2, \url{https://grisha.org/blog/2013/11/07/mod-python-performance-revisited/}}.
+        \bigbreak
+        \centering
+        \includegraphics[width=8cm]{image/apache-nginx-benchmark}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Serveur Web Apache et Nginx}
+        \framesubtitle{Généralités}
+        Apache et Nginx dominent le monde des serveurs web\footnote{Historical yearly trends in the usage statistics of web servers, \url{https://w3techs.com/technologies/overview/web_server}}.
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/web-server-stats}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Serveur Web Apache et Nginx}
+        \framesubtitle{Généralités}
+        Exécuté du PHP, Apache est souvent utilisé avec \lstinline{mod_php}\footnote{How to install and configure PHP, \url{https://ubuntu.com/server/docs/how-to-install-and-configure-php}} et Nginx avec \lstinline{php-fpm}\footnote{PHP FPM pour Nginx, \url{https://grafikart.fr/tutoriels/php-fpm-nginx-693}} par exemple.
+        \bigbreak
+        Dans tous ces cas vus précédemment, Apache et Nginx sont utilisés comme serveur web que ce soit pour du contenu statique ou dynamique.
+        \bigbreak
+        Mais dans de nombreux cas, ils sont utilisés comme reverse proxy.
+        Les technologies vues au chapitres précédents comme Spring et Flask/Gunicorn on déjà un serveur web intégré.
+        Spring à un serveur Tomcat embarqué et Flask/Gunicorn utilise Gunicorn comme serveur HTTP.
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Serveur Web Apache et Nginx}
+        \framesubtitle{Exercices}
+        Servir sur un port des pages statiques avec Apache ou Nginx.
+        \bigbreak
+        Servir sur un autre port, du contenu dynamique avec l'autre serveur un script CGI minimaliste.
+        Genre servir sous la même URL \textquote{Hello World} ou \textquote{Bonjour le monde} ou \textquote{Hola a todos} de manière pseudo aléatoire.
+    \end{frame}
 \end{document}
