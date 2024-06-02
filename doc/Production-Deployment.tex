@@ -1,5 +1,5 @@
 \documentclass{beamer}
-\include{./cours-style.sty}
+\include{../style/cours-style.sty}
 
 % Title
 \title{M.E.P. et déploiement - MS2D / ERIS}
@@ -286,7 +286,7 @@
     \begin{frame}
         \transdissolve
         \frametitle{Les ressources partagées}
-        \framesubtitle{Exercice, avec ou sans KVM~?}
+        \framesubtitle{Exercice \execcounterdispinc{}, avec ou sans KVM~?}
         \begin{columns}
             \column{0.5\textwidth}
             \begin{itemize}
@@ -386,7 +386,7 @@ WantedBy=multi-user.target
 
     \begin{frame}
         \transdissolve
-        \frametitle{Exercice pratique}
+        \frametitle{Exercice pratique \execcounterdispinc{}}
         \framesubtitle{Créer une VM avec Qemu et lancer une application avec systemd}
         Les exigences~:
         \begin{itemize}
@@ -400,7 +400,7 @@ WantedBy=multi-user.target
 
     \begin{frame}[fragile]
         \transdissolve
-        \frametitle{Exercice pratique}
+        \frametitle{Exercice pratique \execcounterdispinc{}}
         \framesubtitle{Une des solutions (commandes à exécuter sur la machine hôte)}
         \begin{lstlisting}[language=bash]
 qemu-img create -f qcow2 linux.qcow2 10G # Create a disk image
@@ -423,7 +423,7 @@ qemu-system-x86_64 -m 2G -smp 1 -nic user,hostfwd=tcp::5022-:22,hostfwd=tcp::508
 
     \begin{frame}[fragile]
         \transdissolve
-        \frametitle{Exercice pratique}
+        \frametitle{Exercice pratique \execcounterdispinc{}}
         \framesubtitle{Une des solutions}
         Le service de la machine hôte~:
         \begin{lstlisting}[language=bash]
@@ -451,7 +451,7 @@ WantedBy=multi-user.target
 
     \begin{frame}[fragile]
         \transdissolve
-        \frametitle{Exercice pratique}
+        \frametitle{Exercice pratique \execcounterdispinc{}}
         \framesubtitle{Une des solutions}
         Le service dans la VM~:
         \begin{lstlisting}[language=bash]
@@ -473,7 +473,7 @@ WantedBy=multi-user.target
 
     \begin{frame}[fragile]
         \transdissolve
-        \frametitle{Exercice pratique}
+        \frametitle{Exercice pratique \execcounterdispinc{}}
         \framesubtitle{Une des solutions (commande à exécuter sur la VM)}
         Commande pour configurer la VM~:
         \begin{lstlisting}[language=bash]
@@ -646,7 +646,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     \begin{frame}
         \transdissolve
         \frametitle{Automatisation de la configuration avec Ansible}
-        \framesubtitle{Excercice}
+        \framesubtitle{Exercice \execcounterdispinc{}}
         En utilisant la VM crée à l'exercice précédent, configurer un inventaire et un playbook pour installer l'application Spring Boot.
         \bigbreak
         Vous pouvez vous aider du \href{https://spring.io/guides/gs/spring-boot}{tutoriel officiel}.
@@ -658,7 +658,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     \begin{frame}
         \transdissolve
         \frametitle{Automatisation de la configuration avec Ansible}
-        \framesubtitle{Solution à l'exercice}
+        \framesubtitle{Solution à l'exercice précédent}
         De nombreuses solutions sont valides.
         Mais avec Java il est plus simple de profiter du \textquote{Write once, run anywhere}.
         \bigbreak
@@ -671,7 +671,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     \begin{frame}[fragile]
         \transdissolve
         \frametitle{Automatisation de la configuration avec Ansible}
-        \framesubtitle{Solution à l'exercice}
+        \framesubtitle{Solution à l'exercice précédent}
         Par exemple, une solution avec uniquement Java 17~:
         \begin{lstlisting}[basicstyle=\ttfamily\tiny]
 ---
@@ -864,7 +864,7 @@ EXPOSE 5000/tcp
     \begin{frame}
         \transdissolve
         \frametitle{Docker, trouver la bonne image}
-        \framesubtitle{Exercice}
+        \framesubtitle{Exercice \execcounterdispinc{}}
         Sur le Docker Hub, trouvez les images pour les applications suivantes:
         \begin{itemize}
             \item Une application NodeJS~.
@@ -877,7 +877,7 @@ EXPOSE 5000/tcp
     \begin{frame}
         \transdissolve
         \frametitle{Docker, créer une image}
-        \framesubtitle{Exercice}
+        \framesubtitle{Exercice \execcounterdispinc{}}
         Développer une image Docker pour une application Spring Boot, la même qu'à l'exercice précédent.
         \bigbreak
         Pensez à optimiser l'image pour qu'elle soit la plus légère possible et le plus sécurisé possible\ldots
@@ -966,7 +966,7 @@ services:
     \begin{frame}[fragile]
         \transdissolve
         \frametitle{Docker compose}
-        \framesubtitle{Exercice, développer une configuration Docker Compose}
+        \framesubtitle{Exercice \execcounterdispinc{}, développer une configuration Docker Compose}
         Un Docker compose pour un site Wordpress, ce dernier a besoin d'une base de données MySQL~.
         \pause
         \begin{lstlisting}[basicstyle=\ttfamily\tiny]
@@ -1002,7 +1002,7 @@ volumes:
     \begin{frame}[fragile]
         \transdissolve
         \frametitle{Docker compose}
-        \framesubtitle{Exercice, développer une configuration Docker Compose}
+        \framesubtitle{Exercice \execcounterdispinc{}, développer une configuration Docker Compose}
         Des variables d'environnement comme les mots de passe, etc, sont définies dans un fichier \lstinline{.env}.
         \bigbreak
         Pas de build de Dockerfile donc une seule commande suffit pour lancer Wordpress~:
@@ -1141,7 +1141,7 @@ $ docker compose up
 
     \begin{frame}
         \transdissolve
-        \frametitle{Exercice de déploiement dans Kubernetes}
+        \frametitle{Exercice \execcounterdispinc{} de déploiement dans Kubernetes}
         \framesubtitle{Exercice évalué sur le déploiement d'une application Spring Boot dans Kubernetes}
         Pousser l'image sur le registry de MicroK8s et exécuter l'application Spring Boot \textquote{Dockerisée} de l'avant dernier exercice dans le MicroK8s de la VM du cluster Proxmox.
         \bigbreak
@@ -1153,8 +1153,8 @@ $ docker compose up
 
     \begin{frame}[fragile]
         \transdissolve
-        \frametitle{Exercice de déploiement dans Kubernetes}
-        \framesubtitle{Solution de l'exercice}
+        \frametitle{Déploiement dans Kubernetes}
+        \framesubtitle{Solution de l'exercice précédent}
         L'image est buildée et tagger sur la machine du développeur~:
         \begin{lstlisting}[language=bash]
 $ docker build -t 10.172.74.134:32000/my-fancy-app:1.0.0 .
@@ -1299,7 +1299,7 @@ $ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
     \begin{frame}
         \transdissolve
         \frametitle{OpenStack}
-        \framesubtitle{Exercice}
+        \framesubtitle{Exercice \execcounterdispinc{}}
         \begin{itemize}
             \item Créer l'image de l'application Spring Boot dans OpenStack.
             \item Créer un flavor de 1 vCPU et 1 Go de RAM~.
@@ -1314,7 +1314,7 @@ $ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
     \begin{frame}
         \transdissolve
         \frametitle{OpenStack}
-        \framesubtitle{Exercice}
+        \framesubtitle{Exercice \execcounterdispinc{}}
         \begin{itemize}
             \item Créer un registre de conteneur dans OpenStack.
             \item Pousser le conteneur de l'application Spring Boot dans le registre OpenStack.
@@ -1346,7 +1346,7 @@ $ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
         \transdissolve
         \frametitle{Serveur Web Apache et Nginx}
         \framesubtitle{Généralités}
-        Les moyens utilisés ont les mêmes capacités mais les performances diffèrent\footnote{Mod\_python Performance Part 2, \url{https://grisha.org/blog/2013/11/07/mod-python-performance-revisited/}}.
+        Les moyens utilisés ont les mêmes capacités, servir du contenu dynamique, mais les performances diffèrent\footnote{Mod\_python Performance Part 2, \url{https://grisha.org/blog/2013/11/07/mod-python-performance-revisited/}}.
         \bigbreak
         \centering
         \includegraphics[width=8cm]{image/apache-nginx-benchmark}
@@ -1366,22 +1366,259 @@ $ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
         \transdissolve
         \frametitle{Serveur Web Apache et Nginx}
         \framesubtitle{Généralités}
-        Exécuté du PHP, Apache est souvent utilisé avec \lstinline{mod_php}\footnote{How to install and configure PHP, \url{https://ubuntu.com/server/docs/how-to-install-and-configure-php}} et Nginx avec \lstinline{php-fpm}\footnote{PHP FPM pour Nginx, \url{https://grafikart.fr/tutoriels/php-fpm-nginx-693}} par exemple.
+        Exécuter du PHP, Apache est souvent utilisé avec \lstinline{mod_php}\footnote{How to install and configure PHP, \url{https://ubuntu.com/server/docs/how-to-install-and-configure-php}} et Nginx avec \lstinline{php-fpm}\footnote{PHP FPM pour Nginx, \url{https://grafikart.fr/tutoriels/php-fpm-nginx-693}} par exemple.
         \bigbreak
         Dans tous ces cas vus précédemment, Apache et Nginx sont utilisés comme serveur web que ce soit pour du contenu statique ou dynamique.
         \bigbreak
         Mais dans de nombreux cas, ils sont utilisés comme reverse proxy.
-        Les technologies vues au chapitres précédents comme Spring et Flask/Gunicorn on déjà un serveur web intégré.
-        Spring à un serveur Tomcat embarqué et Flask/Gunicorn utilise Gunicorn comme serveur HTTP.
+        Les technologies vues aux chapitres précédents comme Spring et Flask/Gunicorn ont déjà un serveur web intégré.
+        Spring a un serveur Tomcat embarqué et Flask/Gunicorn utilise Gunicorn comme serveur HTTP de production.
     \end{frame}
 
     \begin{frame}
         \transdissolve
         \frametitle{Serveur Web Apache et Nginx}
-        \framesubtitle{Exercices}
-        Servir sur un port des pages statiques avec Apache ou Nginx.
+        \framesubtitle{Exercices \execcounterdispinc{} et \execcounterdispinc{}}
+        Servir sur un port/domaine des pages statiques avec Apache ou Nginx.
         \bigbreak
-        Servir sur un autre port, du contenu dynamique avec l'autre serveur un script CGI minimaliste.
-        Genre servir sous la même URL \textquote{Hello World} ou \textquote{Bonjour le monde} ou \textquote{Hola a todos} de manière pseudo aléatoire.
+        Servir sur un autre port/domaine, du contenu dynamique avec l'autre serveur un script CGI minimaliste.
+        Par example, servir sous la même URL \textquote{Hello World} ou \textquote{Bonjour le monde} ou \textquote{Hola a todos} de manière pseudo-aléatoire.
     \end{frame}
+
+    \subsection{Reverse Proxy}\label{subsec:reverse-proxy}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Reverse Proxy\footnote{What is a reverse proxy?, \url{https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/}}}
+        Un Reverse Proxy est un serveur qui reçoit des requêtes de clients et les redirige vers un autre serveur.
+        Il permet d'avoir moins de points d'entrée dans le réseau, d'IP par exemple, que de serveurs.
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/reverse-proxy-flow}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration de Reverse Proxy}
+        Par exemple, pour limiter les besoins en infra, le Reverse Proxy redirige les requêtes vers les serveurs d'application.
+        De telle manière qu'on peut avoir plusieurs services sur un même VPS et avec une seul IP pour diminuer les coûts.
+        \bigbreak
+        La configuration du Reverse Proxy consiste à faire correspondre un domaine à un port.
+        Comme on a de nombreux ports sur une machine peut s'adresser à plusieurs domaines alors qu'on a qu'une IP~.
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/flask-gunicorn-nginx}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration de Reverse Proxy sur un port}
+        Les configurations Nginx sont dans le dossier \lstinline{/etc/nginx/sites-available/}.
+
+        On peut ajouter le fichier \lstinline{yourdomain} suivant~:
+        \begin{lstlisting}
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name your_domain;
+
+    location / {
+        proxy_pass http://localhost:8001;
+        include proxy_params;
+    }
+}
+        \end{lstlisting}
+        Cette configuration associe les domaines \lstinline{your_domain} au serveur d'application bindé au port 8001.
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration de Reverse Proxy sur un socket Unix}
+        Pour plus de performances et de sécurité, quand c'est possible, il est recommandé d'utiliser un Unix Domain Socket.
+        C'est une communication inter-processus qui ne passe pas par le réseau mais par le file system, donc plus rapide.
+        Par contre il est limité à une machine, car on a un file system par machine.
+        \begin{lstlisting}
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name your_domain;
+
+    location / {
+        proxy_pass http://unix:/var/run/sock-guni;
+        include proxy_params;
+    }
+}
+        \end{lstlisting}
+        De son côté, Gunicorn est bindé sur ce même socket Unix~:
+        \begin{lstlisting}[language=bash]
+gunicorn app.py -b /var/run/sock-guni
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exercice \execcounterdispinc{} et \execcounterdispinc{}, développer une configuration de Reverse Proxy}
+        \setlength\parindent{24pt}
+        Dans la VM de l'exercice précédent, configurer un Reverse Proxy pour servir l'application Gunicorn.
+        Le Reverse Proxy et l'application doivent communiquer par un socket Unix.
+        \bigbreak
+        A l'aide d'un \lstinline{docker-compose.yml} déployer un serveur Nginx et l'application Spring déjà conteneurisée dans un précédent exercice.
+        Les deux doivent communiquer par TCP/IP~.
+        \setlength\parindent{0pt}
+    \end{frame}
+
+    \subsection{Certificat SSL}\label{subsec:certificat-ssl}
+    \begin{frame}
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration avec un certificat SSL}
+        Les standards modernes de sécurité web recommandent très fortement le HTTPS et l'utilisation de certificat SSL~.
+        Les clients de votre application en sont demandeur aussi.
+        \bigbreak
+        On peut l'acheter chez une autorité (CA) de certification comme Comodo ou autre.
+        Pour seulement quelques centaines ou milliers d'Euros par an \emoji{face-with-symbols-on-mouth}.
+        Ou on peut utiliser Let's Encrypt qui est gratuit.
+        \bigbreak
+        Let's Encrypt est un projet de CA de la \textquote{Internet Security Research Group} (ISRG) qui fournit des certificats SSL gratuits.
+        Il est sponsorisé par de nombreuses entreprises du numérique.
+        \bigbreak
+        Le moyen le plus simple de l'installer sur votre serveur, dans votre configuration Nginx ou Apache est d'utiliser \lstinline{certbot}\footnote{Certbot, \url{https://certbot.eff.org/}}.
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration avec un certificat SSL}
+        Avec les droits root ou en sudoer, \lstinline{certbot} installe le certificat et modifie la configuration Nginx ou Apache.
+
+        La commande suivante~:
+        \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+$ sudo certbot --nginx -d your_domain
+        \end{lstlisting}
+        Modifie la configuration comme suit~:
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+server {
+    listen 443 ssl; # Managed by Certbot
+
+    ssl on; # Managed by Certbot
+    ssl_certificate     /etc/letsencrypt/live/your_domain/fullchain.pem; # Managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/your_domain/privkey.pem; # Managed by Certbot
+
+    server_name your_domain;
+
+    location / {
+        proxy_pass http://unix:/var/run/sock-guni;
+        include proxy_params;
+    }
+}
+
+server {
+    listen 80 default_server; # Managed by Certbot
+    server_name your_domain; # Managed by Certbot
+    return 301 https://$host$request_uri; # Managed by Certbot
+}
+        \end{lstlisting}
+    \end{frame}
+
+
+    \section{Indicateurs et mesure de performances - Systèmes / Réseau et web}\label{sec:indicateurs-et-mesure-de-performances--systemes-/-reseau-et-web}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Apache et Nginx}
+        \framesubtitle{Exemple de configuration avec un certificat SSL}
+        Les outils présentés dans ce chapitre ont pour but de mesurer les performances des systèmes, réseaux et applications web.
+        Ils permettent de collecter des données pour d'être plus réactif face à un incident passé ou à venir.
+        \bigbreak
+        C'est une liste non exhaustive, celle du programme officiel 3IL~.
+        Mais il en existe bien d'autres comme Graphana, Prometheus, Naemon, \lstinline{journalctl}, \lstinline{grep}, etc.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/control-tower}
+    \end{frame}
+
+    \subsection{Syslogd}\label{subsec:syslogd}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Syslog}
+        \framesubtitle{Créer une journalisation sur mesure}
+        Protocole de transmission de messages de journalisation.
+        Créé haut dessus d'autres protocoles comme UDP ou TCP~.
+        \bigbreak
+        Il est utilisé pour centraliser les logs des serveurs, des applications, des équipements réseaux, du noyau, etc.
+        \bigbreak
+        Il a une partie serveur, le démon \lstinline{syslogd}, et une partie client, \lstinline{syslog}~.
+        \lstinline{syslog} envoie les messages à \lstinline{syslogd} qui les centralise ou les envoie à un autre serveur à la façon d'un proxy.
+        \bigbreak
+        Il a plus de sources de messages que \lstinline{journalctl} vu précédemment.
+        \bigbreak
+        Il est disponible sur les OS Linux et Unix\ldots
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Syslog}
+        \framesubtitle{Paramétrer la journalisation\footnote{\label{syslog}Les événements système de syslog, \url{https://debian-handbook.info/browse/fr-FR/stable/sect.syslog.html}}}
+        Le fichier de configuration est \lstinline{/etc/rsyslog.conf}~.
+        \bigbreak
+        On peut y sélectionner 8 niveaux de priorité~:
+        \begin{itemize}
+            \item \textbf{debug}~: Messages de débogage.
+            \item \textbf{info}~: Messages d'information.
+            \item \textbf{notice}~: Messages normaux mais significatifs.
+            \item \textbf{warning}~: Messages d'avertissement.
+            \item \textbf{err}~: Messages d'erreur.
+            \item \textbf{crit}~: Messages critiques.
+            \item \textbf{alert}~: Messages d'alerte.
+            \item \textbf{emerg}~: Messages d'urgence.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Syslog}
+        \framesubtitle{Paramétrer la journalisation\cref{syslog}}
+        Et ce pour les catégories suivantes~:
+        \begin{itemize}
+            \item \textbf{auth}~: Authentification.
+            \item \textbf{authpriv}~: Authentification privée.
+            \item \textbf{cron}~: Tâches planifiées.
+            \item \textbf{daemon}~: Démon système.
+            \item \textbf{kern}~: Noyau.
+            \item \textbf{lpr}~: Impression.
+            \item \textbf{mail}~: Mail.
+            \item \textbf{news}~: News.
+            \item \textbf{syslog}~: Syslog.
+            \item \textbf{user}~: Utilisateur.
+            \item \textbf{uucp}~: UUCP.
+            \item \textbf{local0} à \textbf{local7}~: Utilisateurs.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{Syslog}
+        \framesubtitle{Exemple de configuration\footnote{Configurer la gestion du serveur de logs, \url{http://www.octetmalin.net/linux/tutoriels/syslog-configurer-gestion-serveur-logs-fichier-syslog.conf.php}}}
+        Et ce pour les catégories suivantes~:
+        \begin{lstlisting}
+# On va sauvegarder les logs de tous les niveaux de priorité des "daemons" dans le fichier "daemons-tout.log" dans "/var/log/".
+daemon.*	/var/log/daemons-tout.log
+# On va sauvegarder que les messages "d'erreurs d'authentification" dans le fichier "login-erreur.log" dans "/var/log/".
+auth.err	/var/log/login-erreur.log
+# On va mêttre plusieurs "services" pour une même destination en utilisant le ";".
+daemon.*; auth.err     /var/log/test.log
+# On va mêttre plusieurs "catégories" pour le même niveau de "priorité » avec le signe « , ».
+kern,daemon.info  /var/log/mail_news
+        \end{lstlisting}
+    \end{frame}
+
+    \subsection{rrdtool}\label{subsec:rrdtool}
 \end{document}
