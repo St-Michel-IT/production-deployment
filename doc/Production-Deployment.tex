@@ -1272,18 +1272,18 @@ The push refers to repository [10.172.74.134:32000/my-fancy-app]
         \framesubtitle{Commandes de base\footnote{\label{opentackcommand}OpenStack, qu'est-ce que c'est ?, \url{https://www.redhat.com/fr/topics/OpenStack}}}
         Pour ajouter une image à OpenStack~:
         \begin{lstlisting}
-$ OpenStack image create <IMAGE> --disk-format raw \
+$ openstack image create <IMAGE> --disk-format raw \
   --container-format bare --public \
   --file ~/images/cirros-0.3.5-x86_64-disk.img
         \end{lstlisting}
         Pour créer un type d'instance, appelé \textquote{flavor}~:
         Pour lancer une instance~:
         \begin{lstlisting}
-OpenStack flavor create --ram 512 --disk 1 --vcpus 1 <FLAVOR INSTANCE_NAME>
+openstack flavor create --ram 512 --disk 1 --vcpus 1 <FLAVOR INSTANCE_NAME>
         \end{lstlisting}
         Pour lancer une instance~:
         \begin{lstlisting}
-$ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
+$ openstack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
         \end{lstlisting}
         \bigbreak
         Toutes les commandes dans la \href{https://docs.OpenStack.org/ocata/user-guide/cli-cheat-sheet.html}{documentation officielle}.
@@ -1332,7 +1332,7 @@ $ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
         \transdissolve
         \frametitle{Serveur Web Apache et Nginx}
         \framesubtitle{Généralités}
-        Sont souvent appelés serveur web mais font en réalité bien plus que serveur HTTP de contenu statique.
+        Sont souvent appelés serveurs web mais font en réalité bien plus que serveur HTTP de contenu statique.
         \bigbreak
         \setlength\parindent{24pt}Apache peut servir du contenu dynamique grâce aux modules \lstinline{mod_cgi}/\lstinline{mod_cgid}\footnote{Contenu dynamique basé sur CGI, \url{https://httpd.apache.org/docs/2.4/fr/howto/cgi.html}}.
         De même sous Nginx (ɛndʒɪn'ɛks) avec le package \lstinline{fcgiwrap}\footnote{Serving CGI Scripts With Nginx On Debian Squeeze/Ubuntu 11.04, \url{https://www.howtoforge.com/serving-cgi-scripts-with-nginx-on-debian-squeeze-ubuntu-11.04-p3}}.
@@ -1340,6 +1340,20 @@ $ OpenStack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
         Apache peut-être programmer en Python grâce à son API Python disponible dans le module \lstinline{mod_cgi}\footnote{Mod\_python Documentation, Tutorial, \url{https://modpython.org/live/current/doc-html/tutorial.html}}.
         Similaire au module \lstinline{ngx_python_module} de Nginx\footnote{Nginx Python Module, \footnote{Nginx Python Module, \url{https://github.com/arut/nginx-python-module}}}.
         \setlength\parindent{0pt}
+    \end{frame}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{Serveur Web Apache et Nginx}
+        \framesubtitle{Histoire}
+        Apache web server est un projet open-source initié par des universitaires américains en 1995\footnote{How Apache Came to Be, \url{https://httpd.apache.org/ABOUT_APACHE}}.
+        \bigbreak
+        Nginx est un projet open-source initié par un ingénieur russe en 2002\footnote{Nginx, \url{https://en.wikipedia.org/wiki/Nginx}}.
+        Il visait à résoudre le problème des C10K\footnote{The C10K problem, \url{http://www.kegel.com/c10k.html}}.
+        Il voulait résoudre les problèmes de certains sites, qui déjà à l'époque, devaient gérer des centaines de milliers de connexions par jour.
+        \bigbreak
+        \centering
+        \includegraphics[width=6cm]{image/big-fish-eating-many-litlle-fishes}
     \end{frame}
 
     \begin{frame}
@@ -1532,8 +1546,8 @@ server {
 
     \begin{frame}
         \transdissolve
-        \frametitle{Apache et Nginx}
-        \framesubtitle{Exemple de configuration avec un certificat SSL}
+        \frametitle{Outils de monitoring}
+        \framesubtitle{Indicateurs et mesure de performances – Systèmes / Réseau et web}
         Les outils présentés dans ce chapitre ont pour but de mesurer les performances des systèmes, réseaux et applications web.
         Ils permettent de collecter des données pour d'être plus réactif face à un incident passé ou à venir.
         \bigbreak
@@ -1544,7 +1558,7 @@ server {
         \includegraphics[width=6cm]{image/control-tower}
     \end{frame}
 
-    \subsection{Syslogd}\label{subsec:syslogd}
+    \subsection{Syslog}\label{subsec:syslog}
 
     \begin{frame}
         \transdissolve
@@ -1674,7 +1688,12 @@ rrdtool create load.rrd  DS:1min:ABSOLUTE:600:U:U   \
         \transdissolve
         \frametitle{RRDTool}
         \framesubtitle{Exemple pour la charge CPU}
-        Voir le script
+        Voir le script Bash \url{https://github.com/St-Michel-IT/production-deployment/blob/main/update-rrd.sh} pour la génération des données et l'update de la base.
+        \bigbreak
+        Voir le script Bash \url{https://github.com/St-Michel-IT/production-deployment/blob/main/graph-rrd.sh} pour la génération des graphiques.
+        \bigbreak
+        \centering
+        \includegraphics[width=10cm]{image/../../load.equinoxe-day}
     \end{frame}
 
 \end{document}
