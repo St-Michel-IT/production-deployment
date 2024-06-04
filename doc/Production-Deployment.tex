@@ -1621,4 +1621,53 @@ kern,daemon.info  /var/log/mail_news
     \end{frame}
 
     \subsection{rrdtool}\label{subsec:rrdtool}
+
+    \begin{frame}
+        \transdissolve
+        \frametitle{RRDTool}
+        \framesubtitle{Définition}
+        \textquote{Round Robin Database Tool} est un outil de gestion de base de données de séries temporelles.
+        \bigbreak
+        Il est utilisé pour stocker des données de séries temporelles comme des données de performances système, réseau, web, etc.
+        \bigbreak
+        Il est facilement installable sur les distributions Linux et Unix.
+        Donc sur la plus-part les serveurs qui hébergent les applications.
+        \bigbreak
+        Dans les cas simples, cela se fait en 3 temps~:
+        \begin{itemize}
+            \item Créer la base de données.
+            \item Mettre à jour la base de données.
+            \item Visualiser les données.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{RRDTool}
+        \framesubtitle{Exemple pour la charge CPU}
+        Largement inspiré de \url{http://old.ed.zehome.com/?page=rrdtool2}, ce tutoriel propose de monitorer la charge CPU d'une machine.
+        \bigbreak
+        Comme vu précédemment RRDTool est utilisé à travers 3 commandes, pour créer la base, l'updater et générer les graphiques.
+
+        Mais en plus, il propose d'utiliser Bash pour automatiser des commandes complexes qui génèrent les données et les graphiques.
+        Il propose également l'usage de \lstinline{cron} pour générer des données de manière periodique.
+
+        La commande de génération de la base de données est~:
+        \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+rrdtool create load.rrd  DS:1min:ABSOLUTE:600:U:U   \
+     DS:5min:ABSOLUTE:600:U:U DS:10min:ABSOLUTE:600:U:U  \
+     RRA:AVERAGE:0.5:1:600  RRA:AVERAGE:0.5:6:700      \
+     RRA:AVERAGE:0.5:24:775 RRA:AVERAGE:0.5:288:797    \
+     RRA:MAX:0.5:1:600 RRA:MAX:0.5:6:700          \
+     RRA:MAX:0.5:24:775 RRA:MAX:0.5:288:797
+        \end{lstlisting}
+        Voir les détails de la création sur \url{https://doc.ubuntu-fr.org/rrdtool#creation_de_notre_base_rrdtool}.
+    \end{frame}
+
+    \begin{frame}[fragile]
+        \transdissolve
+        \frametitle{RRDTool}
+        \framesubtitle{Exemple pour la charge CPU}
+    \end{frame}
+
 \end{document}
