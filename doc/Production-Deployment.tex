@@ -83,11 +83,11 @@
         \begin{columns}
             \column{0.7\textwidth}
             \begin{itemize}
-                \item 1\textsuperscript{ere} année d'intervenant à Saint-Michel \emoji{star-struck}.
+                \item 1\textsuperscript{ere} année d'intervenant à Saint-Michel~\emoji{star-struck}.
 
                 \item 7 ans de conseil en développement au sein d'SSII~.
 
-                \item 7 ans de conseil en développement à mon compte \href{https://papit.fr}{PapIT}.
+                \item 7 ans de conseil en développement à mon compte~\href{https://papit.fr}{PapIT}.
 
                 \item Passionné~!
                 \bigbreak
@@ -121,7 +121,7 @@
                 \item Disque DVD
             \end{itemize}
         \end{itemize}
-        A l'imagine de n'importe quel ordinateur, mais souvent avec plus de capacités et de redondances.
+        À l'imagine de n'importe quel ordinateur, mais souvent avec plus de capacités et de redondances.
     \end{frame}
 
 
@@ -231,7 +231,7 @@
             \column{0.5\textwidth}
             KVM (Kernel-based Virtual Machine) est une technologie de virtualisation ouverte intégrée à Linux.
 
-            C'est un hyperviseur de type 1, qui négocie directement avec le hardware et offre des performances proches de la machine hôte.
+            C'est un hyperviseur de type 1 qui négocie directement avec le hardware et offre des performances proches de la machine hôte.
             Contrairement à un hyperviseur de type 2, qui doit passer par l'OS hôte pour accéder au hardware mais ces derniers ont donc une meilleurs portabilité et compatibilité.
             \column{0.5\textwidth}
             \centering
@@ -274,15 +274,15 @@
         \bigbreak
         Leur chemin par défaut est \lstinline{/etc/systemd/system/}.
         \begin{dangercolorbox}
-            Ne pas confondre \lstinline{systemd} qui exécute des tâches en arrière plan et l'ordonnanceur \lstinline{cron}.
+            Ne pas confondre \lstinline{systemd} qui exécute des tâches en arrière-plan et l'ordonnanceur \lstinline{cron}.
         \end{dangercolorbox}
     \end{frame}
 
-    \begin{frame}[fragile]{Les services}{Examples}
+    \begin{frame}[fragile]{Les services}{Exemples}
         \lstinline{systemd} est donc l'outil de choix pour lancer en production des applications, des progiciels, etc.
 
         Encore mieux, on peut configurer des services pour qu'ils lancent des VM avec Qemu et les applications tourneraient dans les VM~.
-        On profites des avantages de la virtualisation pour isoler les applications et les sécuriser.
+        On profite des avantages de la virtualisation pour isoler les applications et les sécuriser.
         \bigbreak
         Que fait cette configuration~?
         \begin{lstlisting}
@@ -314,6 +314,7 @@ WantedBy=multi-user.target
             \item \lstinline{systemctl reload <service>} pour recharger la configuration d'un service.
         \end{itemize}
     \end{frame}
+
     \begin{frame}{Les services}{Les commandes pour monitorer l'exécution}
         Pour monitor les logs d'un service, la commande \lstinline{journalctl} est très utile.
         \bigbreak
@@ -509,7 +510,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Commande pour exécuter un programme}
         Une fois les dépendances requises installées, on peut exécuter un programme avec le module \lstinline{shell}~.
         \bigbreak
-        Si il faut copier un ou plusieurs fichiers, on peut utiliser le module \lstinline{copy}~.
+        S’il faut copier un ou plusieurs fichiers, on peut utiliser le module \lstinline{copy}~.
         \bigbreak
         Par exemple~:
         \begin{lstlisting}
@@ -761,7 +762,7 @@ EXPOSE 5000/tcp
             \end{minipage}
         }
         \bigbreak
-        C'est donc une image de choix en terme de taille, sécurité et performance.
+        C'est donc une image de choix en termes de taille, sécurité et performance.
         \begin{lstlisting}
 FROM eclipse-temurin:17-alpine # L'image de base
 EXPOSE 8081 # Le port du serveur Spring
@@ -1116,7 +1117,7 @@ $ openstack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
     \begin{frame}{Serveur Web Apache et Nginx}{Généralités}
         Sont souvent appelés serveurs web mais font en réalité bien plus que serveur HTTP de contenu statique.
         \bigbreak
-        \setlength\parindent{24pt}Apache peut servir du contenu dynamique grâce aux modules \lstinline{mod_cgi}/\lstinline{mod_cgid}\footnote{Contenu dynamique basé sur CGI, \url{https://httpd.apache.org/docs/2.4/fr/howto/cgi.html}}.
+        Apache peut servir du contenu dynamique grâce aux modules \lstinline{mod_cgi}/\lstinline{mod_cgid}\footnote{Contenu dynamique basé sur CGI, \url{https://httpd.apache.org/docs/2.4/fr/howto/cgi.html}}.
         De même sous Nginx (ɛndʒɪn'ɛks) avec le package \lstinline{fcgiwrap}\footnote{Serving CGI Scripts With Nginx On Debian Squeeze/Ubuntu 11.04, \url{https://www.howtoforge.com/serving-cgi-scripts-with-nginx-on-debian-squeeze-ubuntu-11.04-p3}}.
         \bigbreak
         Apache peut-être programmer en Python grâce à son API Python disponible dans le module \lstinline{mod_cgi}\footnote{Mod\_python Documentation, Tutorial, \url{https://modpython.org/live/current/doc-html/tutorial.html}}.
@@ -1137,9 +1138,24 @@ $ openstack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
 
     \begin{frame}{Serveur Web Apache et Nginx}{Généralités}
         Les moyens utilisés ont les mêmes capacités, servir du contenu dynamique, mais les performances diffèrent\footnote{Mod\_python Performance Part 2, \url{https://grisha.org/blog/2013/11/07/mod-python-performance-revisited/}}.
-        \bigbreak
-        \centering
-        \includegraphics[width=8cm]{image/apache-nginx-benchmark}
+        \begin{tiny}
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{|l|l|r|r|l|}
+                    \hline
+                    \textbf{Server}     & \textbf{Version}        & \textbf{Req/s} & \textbf{\% of httpd static} & \textbf{Notes}                                \\ \hline
+                    nxweb static file   & 3.2.0-dev               & 512,767        & 347.1\%                     & \textquote{memcache}:false. (626,270 if true) \\ \hline
+                    nginx static file   & 1.0.15                  & 430,135        & 291.1\%                     & stock CentOS 6.3 rpm                          \\ \hline
+                    httpd static file   & 2.4.4, mpm\_event       & 147,746        & 100.0\%                     &                                               \\ \hline
+                    mod\_python handler & 3.5, Python 2.7.5       & 125,139        & 84.7\%                      &                                               \\ \hline
+                    uWSGI               & 1.9.18.2                & 119,175        & 80.7\%                      & -p 16 --threads 1                             \\ \hline
+                    mod\_python wsgi    & 3.5, Python 2.7.5       & 87,304         & 59.1\%                      &                                               \\ \hline
+                    mod\_wsgi           & 3.4                     & 76,251         & 51.6\%                      & embedded mode                                 \\ \hline
+                    nxweb wsgi          & 3.2.0-dev, Python 2.7.5 & 15,141         & 10.2\%                      & possibly misconfigured?                       \\ \hline
+                \end{tabular}
+                \caption{Performance comparison of different servers.}
+            \end{table}
+        \end{tiny}
     \end{frame}
 
     \begin{frame}{Serveur Web Apache et Nginx}{Généralités}
@@ -1178,7 +1194,7 @@ $ openstack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
 
     \begin{frame}{Apache et Nginx}{Exemple de configuration de Reverse Proxy}
         Par exemple, pour limiter les besoins en infra, le Reverse Proxy redirige les requêtes vers les serveurs d'application.
-        De telle manière qu'on peut avoir plusieurs services sur un même VPS et avec une seul IP pour diminuer les coûts.
+        De telle manière qu'on peut avoir plusieurs services sur un même VPS et avec une seule IP pour diminuer les coûts.
         \bigbreak
         La configuration du Reverse Proxy consiste à faire correspondre un domaine à un port.
         Comme on a de nombreux ports sur une machine peut s'adresser à plusieurs domaines alors qu'on a qu'une IP~.
@@ -1309,7 +1325,7 @@ server {
         \bigbreak
         Il est utilisé pour centraliser les logs des serveurs, des applications, des équipements réseaux, du noyau, etc.
         \bigbreak
-        Il a une partie serveur, le démon \lstinline{syslogd}, et une partie client, \lstinline{syslog}~.
+        Il a une partie serveur, le démon \lstinline{syslogd} et une partie client, \lstinline{syslog}~.
         \lstinline{syslog} envoie les messages à \lstinline{syslogd} qui les centralise ou les envoie à un autre serveur à la façon d'un proxy.
         \bigbreak
         Il a plus de sources de messages que \lstinline{journalctl} vu précédemment.
@@ -1346,7 +1362,7 @@ server {
             \item \textbf{news}~: News.
             \item \textbf{syslog}~: Syslog.
             \item \textbf{user}~: Utilisateur.
-            \item \textbf{uucp}~: UUCP.
+            \item \textbf{uucp}~: UUCP~.
             \item \textbf{local0} à \textbf{local7}~: Utilisateurs.
         \end{itemize}
     \end{frame}
@@ -1373,7 +1389,7 @@ kern,daemon.info  /var/log/mail_news
         Il est utilisé pour stocker des données de séries temporelles comme des données de performances système, réseau, web, etc.
         \bigbreak
         Il est facilement installable sur les distributions Linux et Unix.
-        Donc sur la plus-part les serveurs qui hébergent les applications.
+        Donc sur la plupart les serveurs qui hébergent les applications.
         \bigbreak
         Dans les cas simples, cela se fait en 3 temps~:
         \begin{itemize}
@@ -1401,9 +1417,6 @@ rrdtool create load.rrd  DS:1min:ABSOLUTE:600:U:U   \
      RRA:MAX:0.5:24:775 RRA:MAX:0.5:288:797
         \end{lstlisting}
         Voir les détails de la création sur \url{https://doc.ubuntu-fr.org/rrdtool#creation_de_notre_base_rrdtool}.
-    \end{frame}
-
-    \begin{frame}[fragile]{RRDTool}{Exemple pour la charge CPU}
     \end{frame}
 
     \begin{frame}{RRDTool}{Exemple pour la charge CPU}
