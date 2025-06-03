@@ -87,7 +87,7 @@
 
                 \item 7 ans de conseil en développement au sein d'SSII~.
 
-                \item 7 ans de conseil en développement à mon compte~\href{https://papit.fr}{PapIT}.
+                \item 8 ans de conseil en développement à mon compte~\href{https://papit.fr}{PapIT}.
 
                 \item Passionné~!
                 \bigbreak
@@ -133,29 +133,29 @@
             \item Un OS, qui est une couche d'abstraction du hardware présenté précédemment (Ubuntu, Red Hat, Windows, BSD).
             \item Un reverse Proxy (Apache, Nginx, etc.)
             \item Un serveur web (Apache, Nginx, Gunicorn, NextJS, etc.)
-            \item L'application web un ensemble de \textquote{Business rules} implémentées grâce à des bases de données, des IHM, des connections aux API (en PHP, Python, NodeJS, etc.)
+            \item L'application web, un ensemble de \textquote{Business rules} implémentées grâce à des bases de données, des IHM, des connexions aux API (en PHP, Python, NodeJS, etc.)
             \item Une base de données (MySQL, PostgreSQL, MongoDB, etc.)
         \end{itemize}
     \end{frame}
 
 
-    \section{Le ressources partagées}\label{sec:le-ressources-partagees}
+    \section{Les ressources partagées}\label{sec:le-ressources-partagees}
 
     \begin{frame}{Les ressources partagées}{Les machines du web}
-        Dans un environnement de production, on retrouve une forte variabilité des ressources CPU mais surtout des ressources logicielles.
+        Dans un environnement de production, on retrouve une forte variabilité des ressources CPU, mais surtout des ressources logicielles.
         \bigbreak
-        A cette variabilité des environments de production, il faut ajouter la variabilité des environnements de développement.
+        À cette variabilité des environments de production, il faut ajouter la variabilité des environnements de développement.
 
         Beaucoup de développeurs travaillent sous Windows ou Mac OS qui sont rarement des environnements de production.
         Les capacités hardware sont souvent très différentes, la production a plus de capacité que le développement en général.
         \bigbreak
-        C'est cette variabilité des environnements qui est la difficulté majeur du déploiement et de la mise en production.
+        C'est cette variabilité des environnements qui est la difficulté majeure du déploiement et de la mise en production.
     \end{frame}
 
     \begin{frame}{Les ressources partagées}{Les environnements cloud}
         Pour palier à cette variabilité, diverses architectures en nuage ont vu le jour.
 
-        Certaines ont abstraient le hardware voir même une partie du software pour ne laisser que l'application.
+        Certaines ont abstrait le hardware voir même une partie du software pour ne laisser que l'application.
         \bigbreak
         \centering
         \includegraphics[width=6cm]{image/cloud-stacks} \\ IAAS, PAAS et SAAS\\
@@ -194,12 +194,12 @@
     \begin{frame}{Les ressources partagées}{Les environnements cloud}
         Même dans le cloud privé, les vCPU ne sont pas des CPU physiques, mais des CPU partagés.
 
-        Ce n'est indiqué nul part, mais c'est probablement le cas chez OVH~.
+        Ce n'est indiqué nulle part, mais c'est probablement le cas chez OVH~.
         Cela implique que OS qui héberge l'hyperviseur équilibre en permanence les ressources CPU entre les VM~.
         Cela a un coût en performance qui est inconnu.
         \bigbreak
         Techniquement ce n'est pas obligatoire de partager les CPU, mais c'est souvent le cas pour des raisons de scalabilité.
-        Au besoin un coeur physique peut être dédié à une seule VM~.
+        Au besoin, un cœur physique peut être dédié à une seule VM~.
         \bigbreak
         Linode, un cloud provider, apporte des informations claires sur ce sujet \url{https://www.linode.com/docs/products/compute/compute-instances/plans/comparing-shared-and-dedicated-cpus/}.
 
@@ -220,25 +220,27 @@
 
     \begin{frame}{Les ressources partagées}{La virtualisation\cref{arcuscloud}}
         Aujourd'hui la virtualisation est principalement utilisée pour le partage des ressources et isoler les applications dans une VM pour raison de sécurité.
-        Un OS hôte fait tourner un hyperviseur qui lui fait tourner des VM et plus juste un soft compilé.
+        Un OS hôte fait tourner un hyperviseur qui lui fait tourner des VM et plus uniquement un soft compilé.
         \bigbreak
         \centering
         \includegraphics[width=6cm]{image/virtualisation}
     \end{frame}
 
     \begin{frame}{Les ressources partagées}{La virtualisation avec KVM et Qemu\footnote{\label{ubuntukvm}KVM hypervisor: a beginners’ guide, \url{https://ubuntu.com/blog/kvm-hyphervisor}]}}
-        \begin{columns}
-            \column{0.5\textwidth}
-            KVM (Kernel-based Virtual Machine) est une technologie de virtualisation ouverte intégrée à Linux.
+        \begin{small}
+            \begin{columns}
+                \column{0.5\textwidth}
+                KVM (Kernel-based Virtual Machine) est une technologie de virtualisation ouverte intégrée à Linux.
 
-            C'est un hyperviseur de type 1 qui négocie directement avec le hardware et offre des performances proches de la machine hôte.
-            Contrairement à un hyperviseur de type 2, qui doit passer par l'OS hôte pour accéder au hardware mais ces derniers ont donc une meilleurs portabilité et compatibilité.
-            \column{0.5\textwidth}
-            \centering
-            \includegraphics[width=6cm]{image/kvm-qemu}
-        \end{columns}
-        \bigbreak
-        Qemu lui peut faire tourner des VM avec ou sans KVM en fonction des besoins.
+                C'est un hyperviseur de type 1 qui négocie directement avec le hardware et offre des performances proches de la machine hôte.
+                Contrairement à un hyperviseur de type 2, qui doit passer par l'OS hôte pour accéder au hardware, mais ces derniers ont donc une meilleure portabilité et compatibilité.
+                \column{0.5\textwidth}
+                \centering
+                \includegraphics[width=6cm]{image/kvm-qemu}
+            \end{columns}
+            \bigbreak
+            Qemu peut faire tourner des VM avec ou sans KVM en fonction des besoins.
+        \end{small}
     \end{frame}
 
     \begin{frame}{Les ressources partagées}{Exercice \execcounterdispinc{}, avec ou sans KVM~?}
@@ -265,7 +267,7 @@
 
         Il faut le configurer pour qu'il démarre automatiquement, dans un certain ordre et avec les bonnes permissions.
         \bigbreak
-        La configuration principale consiste à définit une ligne de commande qui sera exécutée au démarrage du service.
+        La configuration principale consiste à définir une ligne de commande qui sera exécutée au démarrage du service.
         \bigbreak
         Avec \lstinline{systemd}\footnote{System and Service Manager, \url{https://systemd.io/}} sous Linux, on peut définir des dépendances entre les services.
         Limiter les ressources CPU, mémoire, IO, etc.
@@ -433,7 +435,7 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.s
         \includegraphics[width=5cm]{image/ansible}
     \end{frame}
 
-    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Example d'inventaire}
+    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Exemple d'inventaire}
         Pour accéder à la VM créée précédemment dans Qemu, il faut définir un inventaire avec les données dont on aurait besoin pour y accéder en SSH~.
         \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
 $ ssh chrichri@localhost -p 5022 -v -i /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/virt-ubuntu
@@ -468,7 +470,7 @@ localhost | SUCCESS => {
         Il est agnostique à l'OS~!
     \end{frame}
 
-    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Example de \textquote{playbook}}
+    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Exemple de \textquote{playbook}}
         Qu'a-t-on installé sur un Ubuntu \textit{base server} comme package(s) pour pouvoir exécuter l'application gunicorn Hello World~?
         \pause
         % With apt, packages python3-gunicorn
@@ -493,7 +495,7 @@ $ ansible-playbook -i inventory.ini gunicorn.yml
         \end{lstlisting}
     \end{frame}
 
-    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Example de \textquote{playbook}}
+    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Exemple de \textquote{playbook}}
         Le résultat de l'exécution du playbook \lstinline{gunicorn.yml}~:
         \begin{lstlisting}[language=bash]
 $ ansible-playbook -i inventory.ini gunicorn.yml
@@ -504,7 +506,7 @@ $ ansible-playbook -i inventory.ini gunicorn.yml
 ...
 localhost                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
         \end{lstlisting}
-        A la première exécution, le package est installé, à la seconde il est déjà installé, aucun changement.
+        À la première exécution, le package est installé, à la seconde, il est déjà installé, aucun changement.
     \end{frame}
 
     \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Commande pour exécuter un programme}
@@ -549,7 +551,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     \end{frame}
 
     \begin{frame}{Automatisation de la configuration avec Ansible}{Exercice \execcounterdispinc{}}
-        En utilisant la VM crée à l'exercice précédent, configurer un inventaire et un playbook pour installer l'application Spring Boot.
+        En utilisant la VM crée à l'exercice précédent, configurer un inventaire et un playbook pour installer l'application Spring Boot et configurer un service pour qu'elle se lance automatiquement.
         \bigbreak
         Vous pouvez vous aider du \href{https://spring.io/guides/gs/spring-boot}{tutoriel officiel}.
         \bigbreak
@@ -559,7 +561,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
 
     \begin{frame}{Automatisation de la configuration avec Ansible}{Solution à l'exercice précédent}
         De nombreuses solutions sont valides.
-        Mais avec Java il est plus simple de profiter du \textquote{Write once, run anywhere}.
+        Mais avec Java, il est plus simple de profiter du \textquote{Write once, run anywhere}.
         \bigbreak
         Ce n'est donc pas obliger d'utiliser un système de build comme Maven ou Gradle sur la VM, Java suffit pour exécuter une JAR~.
         \bigbreak
@@ -596,10 +598,10 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         \begin{itemize}
             \item On sait créer et configurer une VM avec Qemu.
             \item On sait créer un service avec systemd pour automatiser des taches dans la machine hôte ou la VM~.
-            \item On sait automatiser la configuration des VMs avec Ansible.
+            \item On sait automatiser la configuration des VM avec Ansible.
         \end{itemize}
         \bigbreak
-        Dans la plus part des clouds privés comme OVH on peut uploader des images de VMs et les lancer.
+        Dans la plupart des clouds privés comme OVH on peut uploader des images de VM et les lancer.
 
         Ces technologies sont donc compatibles avec le cloud et le on-premise.
 
@@ -661,7 +663,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
             \item Il vient surcharger une image de base définit dans \lstinline{FROM}.
             \item On peut y définir des variables d'environnement avec \lstinline{ENV}.
             \item La commande \lstinline{RUN} permet d'exécuter des commandes dans l'image.
-            Comme par exemple pour ajouter des dépendances dans l'étape de build de l'image.
+            Par exemple pour ajouter des dépendances dans l'étape de build de l'image.
             \item La commande \lstinline{CMD} définit la commande qui sera exécutée au démarrage du conteneur.
             \item La commande \lstinline{EXPOSE} définit les ports qui seront exposés par le conteneur.
             \item La commande \lstinline{COPY} permet de copier des fichiers dans l'image.
@@ -700,7 +702,7 @@ EXPOSE 5000/tcp
         \bigbreak
         Il y a probablement une image pour quasi toutes les stacks existantes.
         \bigbreak
-        En terme de cybersécurité, veillez à auditer les développeurs des images pour ne pas subir une \textit{supply chain attack}.
+        En termes de cybersécurité, veillez à auditer les développeurs des images pour ne pas subir une \textit{supply chain attack}.
 
         Une des bonnes pratiques est d'utiliser des images officielles.
         Par exemple pour Tensorflow, le développeur est Google, etc.
@@ -754,7 +756,7 @@ EXPOSE 5000/tcp
     \end{frame}
 
     \begin{frame}[fragile]{Docker, créer une image}{Une solution possible de l'exercice}
-        Avec uniquement une image Eclipse Temurin basée sur une distribution Alpine Linux comme par exemple l'image Docker \textbf{officielle} \lstinline{eclipse-temurin:17-alpine} on génère une image de \textquote{seulement} ~360 Mo\ldots.
+        Avec uniquement une image Eclipse Temurin basée sur une distribution Alpine Linux, par exemple l'image Docker \textbf{officielle} \lstinline{eclipse-temurin:17-alpine} on génère une image de \textquote{seulement} ~360 Mo\ldots.
         \bigbreak
         \fbox{%
             \begin{minipage}{0.95\textwidth}
@@ -910,7 +912,7 @@ $ docker compose up
 
     \begin{frame}{Kubernetes}{Addons et third party\footnote{Installing Addons, \url{https://kubernetes.io/docs/concepts/cluster-administration/addons/}}}
         Développé par la communauté Kubernetes, ils apportent des fonctionnalités supplémentaires à Kubernetes.
-        Comme par exemple l'add-on registry qui permet de stocker les images des conteneurs\footnote{How to use the built-in registry, \url{https://microk8s.io/docs/registry-built-in}}.
+        Par exemple, l'add-on registry qui permet de stocker les images des conteneurs\footnote{How to use the built-in registry, \url{https://microk8s.io/docs/registry-built-in}}.
         \bigbreak
         Ceux proposés par la documentation officielle \url{https://kubernetes.io/docs/concepts/cluster-administration/addons/}.
 
@@ -948,8 +950,8 @@ $ docker compose up
     \begin{frame}{Kubernetes}{Les différentes versions\footnote{How to deploy Kubernetes, \url{https://ubuntu.com/kubernetes/install}}}
         Il existe plusieurs distributions de Kubernetes~:
         \begin{itemize}
-            \item \textbf{MicroK8s} pour des clusters de petites et moyenne taille.
-            \item \textbf{Charmed Kubernetes} pour des cluster moyen et gros.
+            \item \textbf{MicroK8s} pour des clusters de petite et moyenne taille.
+            \item \textbf{Charmed Kubernetes} pour des clusters moyen et gros.
             \item \textbf{Kubeadm} un DIY Kubernetes configurable.
             \item Many more\ldots
         \end{itemize}
@@ -964,7 +966,7 @@ $ docker compose up
     \begin{frame}{Exercice \execcounterdispinc{} de déploiement dans Kubernetes}{Exercice évalué sur le déploiement d'une application Spring Boot dans Kubernetes}
         Pousser l'image sur le registry de MicroK8s et exécuter l'application Spring Boot \textquote{Dockerisée} de l'avant dernier exercice dans le MicroK8s de la VM du cluster Proxmox.
         \bigbreak
-        L'application doit être accessible sur le réseau de St-Michel.
+        L'application doit être accessible sur le réseau de Saintt-Michel.
         \bigbreak
         \centering
         \includegraphics[width=5cm]{image/maniac-programmer-sorting-her-code}
@@ -1005,7 +1007,7 @@ The push refers to repository [10.172.74.134:32000/my-fancy-app]
         \bigbreak
         \textquote{Cloud Infrastructure for Virtual Machines, Bare Metal, and Containers}.
         \bigbreak
-        \textquote{OpenStack controls large pools of compute, storage, and networking resources, all managed through APIs or a dashboard.}
+        \textquote{OpenStack controls large pools of compute, storage, and networking resources, all managed through API or a dashboard.}
         \bigbreak
         Il est en open source sous licence Apache 2.0 \textquote{OpenStack is developed by the community. For the community...}.
     \end{frame}
@@ -1049,7 +1051,7 @@ The push refers to repository [10.172.74.134:32000/my-fancy-app]
         \bigbreak
         Une CLI à installer avec \lstinline{pip install python-OpenStackclient}.
         \bigbreak
-        Un SDK Python pour les APIs OpenStack.
+        Un SDK Python pour les API OpenStack.
     \end{frame}
 
     \begin{frame}{OpenStack}{Résumé des fonctionnalités\footnote{\label{redhatopentack}OpenStack, qu'est-ce que c'est ?, \url{https://www.redhat.com/fr/topics/OpenStack}}}
@@ -1064,7 +1066,7 @@ The push refers to repository [10.172.74.134:32000/my-fancy-app]
         \end{itemize}
     \end{frame}
 
-    \begin{frame}[fragile]{OpenStack}{Commandes de base\footnote{\label{opentackcommand}OpenStack, qu'est-ce que c'est ?, \url{https://www.redhat.com/fr/topics/OpenStack}}}
+    \begin{frame}[fragile]{OpenStack}{Commandes de base\cref{redhatopentack}}
         Pour ajouter une image à OpenStack~:
         \begin{lstlisting}
 $ openstack image create <IMAGE> --disk-format raw \
@@ -1179,7 +1181,7 @@ $ openstack server create --image <IMAGE> --flavor <FLAVOR INSTANCE_NAME>
         Servir sur un port/domaine des pages statiques avec Apache ou Nginx.
         \bigbreak
         Servir sur un autre port/domaine, du contenu dynamique avec l'autre serveur un script CGI minimaliste.
-        Par example, servir sous la même URL \textquote{Hello World} ou \textquote{Bonjour le monde} ou \textquote{Hola a todos} de manière pseudo-aléatoire.
+        Par exemple, servir sous la même URL \textquote{Hello World} ou \textquote{Bonjour le monde} ou \textquote{Hola a todos} de manière pseudo-aléatoire.
     \end{frame}
 
     \subsection{Reverse Proxy}\label{subsec:reverse-proxy}
@@ -1225,8 +1227,8 @@ server {
 
     \begin{frame}[fragile]{Apache et Nginx}{Exemple de configuration de Reverse Proxy sur un socket Unix}
         Pour plus de performances et de sécurité, quand c'est possible, il est recommandé d'utiliser un Unix Domain Socket.
-        C'est une communication inter-processus qui ne passe pas par le réseau mais par le file system, donc plus rapide.
-        Par contre il est limité à une machine, car on a un file system par machine.
+        C'est une communication inter-processus qui ne passe pas par le réseau mais par le \textit{file system}, donc plus rapide.
+        Par contre il est limité à une machine, car on a un \textit{file system} par machine.
         \begin{lstlisting}
 server {
     listen 80;
@@ -1340,7 +1342,7 @@ server {
         \begin{itemize}
             \item \textbf{debug}~: Messages de débogage.
             \item \textbf{info}~: Messages d'information.
-            \item \textbf{notice}~: Messages normaux mais significatifs.
+            \item \textbf{notice}~: Messages normaux, mais significatifs.
             \item \textbf{warning}~: Messages d'avertissement.
             \item \textbf{err}~: Messages d'erreur.
             \item \textbf{crit}~: Messages critiques.
