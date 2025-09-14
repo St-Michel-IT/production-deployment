@@ -21,13 +21,17 @@
 
     \begin{frame}
         \titlepage
+        \centering
+        \url{https://github.com/St-Michel-IT/production-deployment}
     \end{frame}
 
 
     \section{Table des matières}\label{sec:toc}
 
     \begin{frame}{Table des matières}
-        \tableofcontents
+        \begin{multicols}{2}
+            \tableofcontents
+        \end{multicols}
     \end{frame}
 
 
@@ -322,10 +326,10 @@ WantedBy=multi-user.target
         \bigbreak
         Quelques exemples de commandes utiles~:
         \begin{itemize}
-            \item \lstinline{journalctl --unit<service>} pour afficher les logs d'un service.
-            \item \lstinline{journalctl --unit<service> -f} pour afficher les logs en temps réel.
-            \item \lstinline{journalctl --unit<service> --since "2024-04-17 00:00:00"} pour afficher les logs depuis une date.
-            \item \lstinline{journalctl --unit<service> --since "2024-04-17 00:00:00" --until "2024-04-17 23:59:59"} pour afficher les logs entre deux dates.
+            \item \lstinline{journalctl --unit=<service>} pour afficher les logs d'un service.
+            \item \lstinline{journalctl --unit=<service> -f} pour afficher les logs en temps réel.
+            \item \lstinline{journalctl --unit=<service> --since "2024-04-17 00:00:00"} pour afficher les logs depuis une date.
+            \item \lstinline{journalctl --unit=<service> --since "2024-04-17 00:00:00" --until "2024-04-17 23:59:59"} pour afficher les logs entre deux dates.
             \item \lstinline{journalctl --unit=<service> -n 100 --no-pager} pour afficher les 100 dernière lignes.
         \end{itemize}
     \end{frame}
@@ -422,6 +426,33 @@ touch ~/.ssh/authorized_keys
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQ8z4... chrichri@localhost" >> ~/.ssh/authorized_keys
         \end{lstlisting}
         Expliquez chaque commande.
+    \end{frame}
+
+    \begin{frame}{Complément de solution sur les dernières versions d'Ubuntu\footnote{ask Ubuntu, Unable to disable password authentication over SSH, \url{https://askubuntu.com/questions/1440290/unable-to-disable-password-authentication-over-ssh}}}
+        \begin{dangercolorbox}
+            Si la solution précédente ne suffit pas, comme sur certaines versions récentes d'Ubuntu.
+            Désactiver le mot de passe dans la configuration ajoutée par Cloud Init.
+        \end{dangercolorbox}
+        \begin{footnotesize}
+            \begin{itemize}
+                \item Vérifier la présence de la directive d’inclusion :
+                \begin{itemize}
+                    \item Ligne souvent présente dans \lstinline{/etc/ssh/sshd\_config} :
+                    \lstinline{Include /etc/ssh/sshd\_config.d/*.conf}
+                \end{itemize}
+                \item Identifier le fichier chargé (souvent ajouté par cloud-init) :
+                \lstinline{/etc/ssh/sshd\_config.d/50-cloud-init.conf}
+                \item Modifier ce fichier pour désactiver l’authentification par mot de passe :
+                \begin{itemize}
+                    \item Remplacer ou commenter :
+                    \lstinline{PasswordAuthentication yes} \\
+                    par \lstinline{\#PasswordAuthentication yes} ou \lstinline{PasswordAuthentication no}
+                \end{itemize}
+                \item Redémarrer le service SSH pour appliquer le changement :
+                \\
+                \lstinline{sudo systemctl restart ssh} (ou \lstinline{sshd})
+            \end{itemize}
+        \end{footnotesize}
     \end{frame}
 
 
@@ -551,7 +582,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     \end{frame}
 
     \begin{frame}{Automatisation de la configuration avec Ansible}{Exercice \execcounterdispinc{}}
-        En utilisant la VM crée à l'exercice précédent, configurer un inventaire et un playbook pour installer l'application Spring Boot et configurer un service pour qu'elle se lance automatiquement.
+        En utilisant la VM crée à l'exercice précédent, configurer un inventaire et un playbook pour installer les dépendances de l'application Spring Boot, son code et configurer un service pour qu'elle se lance automatiquement.
         \bigbreak
         Vous pouvez vous aider du \href{https://spring.io/guides/gs/spring-boot}{tutoriel officiel}.
         \bigbreak
@@ -573,24 +604,86 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         Par exemple, une solution avec uniquement Java 17~:
         \begin{lstlisting}[basicstyle=\ttfamily\tiny]
 ---
-- hosts: gunicorn
+- name: Déployer une application Spring Boot
+  hosts: springboot
+  become: true
+
   vars:
-  - JAR_DEST_PATH: /home/chrichri/helloworld-0.0.1-SNAPSHOT.jar
-  become: yes
+    app_name: springboot-app
+    app_user: ubuntu
+    jar_name: app.jar
+    jar_source: spring-boot-0.0.1-SNAPSHOT.jar
+    jar_dest_dir: /opt/monapp
+    java_package: openjdk-17-jdk
+
   tasks:
-  - name: Install Java 17
-    apt:
-      name: openjdk-17-jdk
-      state: present
+    - name: Installer Java 17
+      apt:
+        name: "{{ java_package }}"
+        state: present
+        update_cache: yes
 
-  - name: Copy Spring Boot Application
-    copy:
-      src: /home/chrichri/Documents/Campus-St-Michel-IT/production-deployment/helloworld/build/libs/helloworld-0.0.1-SNAPSHOT.jar
-      dest: "{{ JAR_DEST_PATH }}"
-
-  - name: Run Spring Boot Application
-    shell: nohup java -jar {{ JAR_DEST_PATH }} &
+    - name: Créer le dossier de déploiement
+      file:
+        path: "{{ jar_dest_dir }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0755'
         \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Solution à l'exercice précédent}
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+    - name: Copier le fichier .jar sur la VM
+      copy:
+        src: "{{ jar_source }}"
+        dest: "{{ jar_dest_dir }}/{{ jar_name }}"
+        mode: '0755'
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+
+    - name: Créer le service systemd pour Spring Boot
+      copy:
+        dest: /etc/systemd/system/{{ app_name }}.service
+        content: |
+          [Unit]
+          Description=Spring Boot Application
+          After=network.target
+
+          [Service]
+          User={{ app_user }}
+          ExecStart=/usr/bin/java -jar {{ jar_dest_dir }}/{{ jar_name }}
+          SuccessExitStatus=143
+          Restart=always
+          RestartSec=5
+
+          [Install]
+          WantedBy=multi-user.target
+      notify: Reload systemd
+
+    - name: Activer le service au démarrage
+      systemd:
+        name: "{{ app_name }}"
+        enabled: yes
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}[fragile]{Automatisation de la configuration avec Ansible}{Solution à l'exercice précédent}
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+    - name: Redémarrer le service Spring Boot
+      systemd:
+        name: "{{ app_name }}"
+        state: restarted
+
+  handlers:
+    - name: Reload systemd
+      command: systemctl daemon-reload
+        \end{lstlisting}
+        \bigbreak
+        \begin{center}
+            \includegraphics[width=5cm]{image/zen-automaton-configuration}
+        \end{center}
     \end{frame}
 
 
@@ -612,6 +705,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
     \section{Docker}\label{sec:docker}
 
     \begin{frame}{Docker}{Définition}
+        \small
         \textquote{Accelerate how you build, share, and run applications}\footnote{What is Docker, \url{https://www.docker.com/}}.
         \bigbreak
         C'est un outil qui permet de créer des conteneurs qui sont des environnements isolés pour exécuter des applications.
@@ -623,7 +717,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0    s
         \begin{columns}
             \column{0.5\textwidth}
             \centering
-            \includegraphics[width=5cm]{image/docker-vs-vm}\footnotemark
+            \includegraphics[width=6cm]{image/docker-vs-vm} \\ Containers vs. virtual machines\footnotemark
             \column{0.5\textwidth}
             Il utilise des outils de la machine, du kernel, \lstinline{chroot} et des librairies de la machine hôte pour fonctionner mais ne fait pas tourner un autre OS contrairement à la virtualisation.
         \end{columns}
@@ -725,6 +819,45 @@ EXPOSE 5000/tcp
         \end{itemize}
     \end{frame}
 
+    \begin{frame}[fragile]{Les commandes Docker}{La commande \lstinline{docker run}}
+        \small
+        La commande \lstinline{docker run} permet de lancer un conteneur à partir d'une image.
+        \bigbreak
+        Elle peut prendre plusieurs options~:
+        \begin{itemize}
+            \item \lstinline{-d} pour lancer le conteneur en arrière-plan (détaché).
+            \item \lstinline{-p <host-port>:<container-port>} pour exposer un port du conteneur sur un port de la machine hôte.
+            \item \lstinline{-v <host-dir|named-vol>:<container-dir>} pour monter un volume de la machine hôte dans le conteneur.
+            \begin{dangercolorbox}
+                Il existe deux types de volumes~: les volumes nommés et les volumes liés.
+                Les volumes nommés sont gérés par Docker et sont stockés dans un répertoire spécifique sur la machine hôte.
+                Les volumes liés sont des répertoires de la machine hôte qui sont montés dans le conteneur.
+            \end{dangercolorbox}
+            \item \lstinline{--name <container-name>} pour donner un nom au conteneur.
+            \item \lstinline{--rm} pour supprimer le conteneur à l'arrêt.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}[fragile]{Les commandes Docker}{La commande \lstinline{docker run}}
+        \small
+        Par exemple, pour lancer une image Docker en arrière-plan, exposer le port 8080 du conteneur sur le port 8080 de la machine hôte et monter le répertoire courant dans le conteneur~:
+        \begin{lstlisting}[language=bash]
+docker run -d -p 8080:8080 -v $(pwd):/app --name my-container my-image
+        \end{lstlisting}
+        \bigbreak
+        \begin{dangercolorbox}
+            Attention, si le port est déjà utilisé par un autre conteneur ou une autre application, la commande échouera.
+            Il faut donc s'assurer que le port est libre avant de lancer le conteneur.
+        \end{dangercolorbox}
+        \bigbreak
+        Pour modifier ces paramètres d'une interface, il y a 3 options possibles~:
+        \begin{itemize}
+            \item Utiliser la commande \lstinline{docker run} avec les options souhaitées.
+            \item Modifier ces options lors du lancement depuis Docker Desktop.
+            \item Utiliser un fichier de configuration Docker Compose.
+        \end{itemize}
+    \end{frame}
+
     \begin{frame}{Docker, créer une image}{Instllation d'un environnement de développement Docker}
         Comme le dit le site Docker, \textit{Build, Share, Run, verify}.
         Tout cela est possible avec Docker Desktop.
@@ -749,14 +882,14 @@ EXPOSE 5000/tcp
     \begin{frame}{Docker, créer une image}{Exercice \execcounterdispinc{}}
         Développer une image Docker pour une application Spring Boot, la même qu'à l'exercice précédent.
         \bigbreak
-        Pensez à optimiser l'image pour qu'elle soit la plus légère possible et le plus sécurisé possible\ldots
+        Pensez à optimiser l'image pour qu'elle soit la plus légère possible et le plus sécurisée possible\ldots
         \bigbreak
         \centering
         \includegraphics[width=5cm]{image/young-studying}
     \end{frame}
 
     \begin{frame}[fragile]{Docker, créer une image}{Une solution possible de l'exercice}
-        Avec uniquement une image Eclipse Temurin basée sur une distribution Alpine Linux, par exemple l'image Docker \textbf{officielle} \lstinline{eclipse-temurin:17-alpine} on génère une image de \textquote{seulement} ~360 Mo\ldots.
+        Avec uniquement une image Eclipse Temurin basée sur une distribution Alpine Linux, par exemple l'image Docker \textbf{officielle} \lstinline{eclipse-temurin:17-jre-alpine} on génère une image de \textquote{seulement} ~180 Mo\ldots.
         \bigbreak
         \fbox{%
             \begin{minipage}{0.95\textwidth}
@@ -765,13 +898,29 @@ EXPOSE 5000/tcp
         }
         \bigbreak
         C'est donc une image de choix en termes de taille, sécurité et performance.
+
         \begin{lstlisting}
-FROM eclipse-temurin:17-alpine # L'image de base
+FROM eclipse-temurin:17-jre-alpine # L'image de base
 EXPOSE 8081 # Le port du serveur Spring
 # Le fichier JAR
 COPY helloworld/build/libs/helloworld-0.0.1-SNAPSHOT.jar /app/spring-boot.jar
 # Exécution de la JAR
 CMD ["java", "-jar", "/app/spring-boot.jar"]
+        \end{lstlisting}
+        Mais pourquoi \lstinline{jre}~?
+    \end{frame}
+
+    \begin{frame}[fragile]{Docker, utiliser une image déjà faite}{Exercice \execcounterdispinc{}}
+        Lancer l'application Spring Boot, en utilisant la Jar, mais sans Dockerfile.
+        \bigbreak
+        Trouver l'image la plus légère possible et la plus sécurisé possible\ldots
+        \bigbreak
+        \begin{center}
+            \includegraphics[width=5cm]{image/whale-scream}
+        \end{center}
+        \pause
+        \begin{lstlisting}[language=bash,basicstyle=\ttfamily\tiny]
+docker run --rm -v "$PWD/spring-boot-0.0.1-SNAPSHOT.jar":/opt/app/app.jar -p 8080:8080 eclipse-temurin:17-jre-alpine java -jar /opt/app/app.jar
         \end{lstlisting}
     \end{frame}
 
@@ -807,10 +956,13 @@ services:
     \end{frame}
 
     \begin{frame}[fragile]{Docker compose}{Le fichier de configuration Docker Compose\footnote{docker compose, \url{https://docs.docker.com/reference/cli/docker/compose/}}}
+        \small
         Les commandes pour builder, lancer et stopper les conteneurs définis dans le fichier \lstinline{docker-compose.yml}~:
         \begin{itemize}
             \item \lstinline{docker compose build} pour construire les images.
             \item \lstinline{docker compose up} pour lancer les conteneurs.
+            Build si aucun build, sinon utilise les images existantes.
+            \item \lstinline{ddocker compose up --build} pour construire les images et lancer les conteneurs.
             \item \lstinline{docker compose down} pour arrêter les conteneurs.
             \item \lstinline{docker compose ps} pour lister les conteneurs en cours d'exécution.
             \item \lstinline{docker compose ps -a} pour lister tous les conteneurs.
@@ -820,9 +972,14 @@ services:
         Elles sont très similaires aux commandes Docker.
     \end{frame}
 
-    \begin{frame}[fragile]{Docker compose}{Exercice \execcounterdispinc{}, développer une configuration Docker Compose}
+    \begin{frame}{Docker compose}{Exercice \execcounterdispinc{}, développer une configuration Docker Compose}
         Un Docker compose pour un site Wordpress, ce dernier a besoin d'une base de données MySQL~.
-        \pause
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/question-mark-on-a-blank-background}
+    \end{frame}
+
+    \begin{frame}[fragile]{Docker compose}{Solution de l'exercice précédent, développer une configuration Docker Compose}
         \begin{lstlisting}[basicstyle=\ttfamily\tiny]
 services:
   db:
@@ -853,12 +1010,80 @@ volumes:
         \end{lstlisting}
     \end{frame}
 
-    \begin{frame}[fragile]{Docker compose}{Exercice \execcounterdispinc{}, développer une configuration Docker Compose}
+    \begin{frame}[fragile]{Docker compose}{Conseils sur l'exercice précédent, développer une configuration Docker Compose}
         Des variables d'environnement comme les mots de passe, etc, sont définies dans un fichier \lstinline{.env}.
         \bigbreak
         Pas de build de Dockerfile donc une seule commande suffit pour lancer Wordpress~:
         \begin{lstlisting}[language=bash]
 $ docker compose up
+        \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}{Docker compose}{Exercice \execcounterdispinc{}, développer une configuration Docker Compose}
+        Un Docker compose pour un site Wordpress et un reverse Proxy \textbf{Nginx}.
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/question-mark-on-a-blank-background}
+    \end{frame}
+
+    \begin{frame}[fragile]{Docker compose}{Solution de l'exercice précédent, développer une configuration Docker Compose}
+        L'image \lstinline{db} ne change pas.
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+services:
+  db:
+...
+  wordpress:
+    image: wordpress:latest
+...
+    environment:
+...
+      # Cannot make it work with /etc/hosts, it needs https://nip.io/
+      VIRTUAL_HOST: wordpress.192.168.1.101.nip.io
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - wordpress
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  db_data:
+  wp_data:
+        \end{lstlisting}
+        \begin{dangercolorbox}
+            Impossible à faire fonctionner avec le \lstinline{/etc/hosts} sur ma machine, j'ai utilisé \url{https://nip.io/}.
+        \end{dangercolorbox}
+    \end{frame}
+
+    \begin{frame}[fragile]{Docker compose}{Solution de l'exercice précédent, développer une configuration Docker Compose}
+        La conf Nginx \lstinline{./default.conf}~:
+        \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+# Redirects
+server {
+    listen 80;
+    server_name 192.168.1.101;
+    return 301 http://wordpress.192.168.1.101.nip.io$request_uri;
+}
+
+server {
+    listen 80;
+    server_name 192.168.1.101.nip.io;
+    return 301 http://wordpress.192.168.1.101.nip.io$request_uri;
+}
+# Reverse Proxy for WordPress
+server {
+    listen 80;
+    server_name wordpress.192.168.1.101.nip.io;
+
+    location / {
+        proxy_pass http://wordpress:80;  # use container name
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
         \end{lstlisting}
     \end{frame}
 
@@ -1381,6 +1606,16 @@ daemon.*; auth.err     /var/log/test.log
 # On va mêttre plusieurs "catégories" pour le même niveau de "priorité » avec le signe « , ».
 kern,daemon.info  /var/log/mail_news
         \end{lstlisting}
+    \end{frame}
+
+    \begin{frame}{Syslog}{Exercice \execcounterdispinc{}}
+        Dans le cluster Kubernetes déployé précédemment, déployer 2 pods générant des logs.
+        Comme par exemple, une application et reverse proxy utilisé par cette dernière.
+        Ces 2 pods sont des Docker exécutants Syslog comme client pour envoyer les logs àun 3\textsuperscript{e} pod lui serveur de Syslog.
+        L'exercice est validé quand on peut lire les logs des 2 clients sur le serveur.
+        \bigbreak
+        \centering
+        \includegraphics[width=5cm]{image/syslog-exercice}
     \end{frame}
 
     \subsection{rrdtool}\label{subsec:rrdtool}
